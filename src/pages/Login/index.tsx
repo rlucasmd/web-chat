@@ -1,5 +1,11 @@
+import logoImage from "../../assets/logo.svg";
 function Login() {
-  return <h1>login</h1>;
+  return (
+    <div>
+      <h1>Login</h1>
+      <img src={logoImage} alt="" />
+    </div>
+  );
 }
 
 export { Login };
