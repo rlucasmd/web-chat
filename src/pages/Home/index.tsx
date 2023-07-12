@@ -9,6 +9,7 @@ import logoImage from "../../assets/logo.svg";
 import { Input } from "../../components/Input";
 import { MagnifyingGlass } from "phosphor-react";
 import { ChatsList } from "./components/ChatsList";
+import { Chat } from "./components/Chat";
 function Home() {
   return (
     <HomeContainer>
@@ -24,7 +25,9 @@ function Home() {
           <ChatsList />
         </AsideContent>
       </Aside>
-      <Main></Main>
+      <Main>
+        <Chat />
+      </Main>
     </HomeContainer>
   );
 }

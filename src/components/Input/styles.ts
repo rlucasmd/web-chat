@@ -9,7 +9,7 @@ const InputContainer = styled("div", {
   height: 50,
   alignItems: "center",
   color: "$black",
-  background: "$white",
+  background: "$details",
 
   svg: {
     color: "$gray-medium",
@@ -20,6 +20,7 @@ const InputContainer = styled("div", {
       color: "$gray-dark",
     },
   },
+  filter: "drop-shadow(2px 4px 2px rgba(0, 0, 0, 0.25))",
 });
 const InputContent = styled("input", {
   all: "unset",
