@@ -4,6 +4,8 @@ const ChatsContainer = styled("div", {
   display: "flex",
   flexDirection: "column",
   width: "100%",
+  background: "$details",
+  flex: "1 1 auto",
 });
 
 const Content = styled("div", {

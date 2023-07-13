@@ -12,8 +12,7 @@ const ChatHeader = styled("header", {
   width: "100%",
   height: "fit-content",
   padding: "24px 32px",
-  background: "$background",
-  // filter: "drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25))",
+  background: "$details",
   borderBottom: "1px solid $gray-light",
 
   gap: 24,

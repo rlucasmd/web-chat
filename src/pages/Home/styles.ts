@@ -10,8 +10,8 @@ const Aside = styled("aside", {
   display: "flex",
   width: "100%",
   maxWidth: 400,
-  flexDirection: "column",
-  height: "100vh",
+  flexFlow: "column",
+  overflowX: "auto",
 
   borderRight: "1px solid $gray-light",
 });
@@ -19,9 +19,10 @@ const Aside = styled("aside", {
 const AsideHeader = styled("div", {
   display: "flex",
   flexDirection: "column",
-  width: "100%",
+  flex: "0 1 auto",
   gap: 16,
   padding: 24,
+  background: "$details",
 
   borderBottom: "1px solid $gray-light",
 
@@ -32,6 +33,7 @@ const AsideHeader = styled("div", {
 const AsideContent = styled("div", {
   display: "flex",
   width: "100%",
+  flex: 1,
 });
 
 const Main = styled("main", {

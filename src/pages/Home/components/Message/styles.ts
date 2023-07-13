@@ -19,8 +19,9 @@ const Content = styled("div", {
   position: "relative",
   display: "flex",
   flexDirection: "column",
-  padding: 8,
+  padding: "8px 8px 16px 8px",
   borderRadius: 8,
+  height: "fit-content",
 
   background: "$purple",
 

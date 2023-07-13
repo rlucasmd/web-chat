@@ -14,6 +14,36 @@ const chats = [
     lastMessage: "lorem ipsum dolor avne gut",
     avatarUrl: "https://github.com/ranieri3232.png",
   },
+  {
+    id: "contato3",
+    name: "Manoel Gomes",
+    lastMessage: "lorem ipsum dolor avne gut",
+    avatarUrl: "https://github.com/ranieri3232.png",
+  },
+  {
+    id: "contato4",
+    name: "Manoel Gomes",
+    lastMessage: "lorem ipsum dolor avne gut",
+    avatarUrl: "https://github.com/ranieri3232.png",
+  },
+  {
+    id: "contato5",
+    name: "Manoel Gomes",
+    lastMessage: "lorem ipsum dolor avne gut",
+    avatarUrl: "https://github.com/ranieri3232.png",
+  },
+  {
+    id: "contato6",
+    name: "Manoel Gomes",
+    lastMessage: "lorem ipsum dolor avne gut",
+    avatarUrl: "https://github.com/ranieri3232.png",
+  },
+  {
+    id: "contato7",
+    name: "Manoel Gomes",
+    lastMessage: "lorem ipsum dolor avne gut",
+    avatarUrl: "https://github.com/ranieri3232.png",
+  },
 ];
 
 function ChatsList() {
