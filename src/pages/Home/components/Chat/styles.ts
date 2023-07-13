@@ -3,6 +3,7 @@ import { styled } from "../../../../styles";
 const ChatContainer = styled("div", {
   display: "flex",
   flex: 1,
+  flexDirection: "column",
   background: "$details",
 });
 
@@ -33,11 +34,12 @@ const ChatHeader = styled("header", {
       color: "$gray-medium",
     },
   },
-  ">img": {
-    width: 64,
-    height: 64,
-    borderRadius: 999,
-  },
 });
 
-export { ChatContainer, ChatHeader };
+const ChatMessagesWrapper = styled("div", {
+  display: "flex",
+  flexDirection: "column",
+  padding: 32,
+});
+
+export { ChatContainer, ChatHeader, ChatMessagesWrapper };

@@ -1,3 +1,4 @@
+import { Avatar } from "../../../../components/Avatar";
 import { Chat, ChatsContainer, Content } from "./styles";
 
 const chats = [
@@ -20,7 +21,7 @@ function ChatsList() {
     <ChatsContainer>
       {chats.map((chat) => (
         <Chat key={chat.id}>
-          <img src={chat.avatarUrl} alt="" />
+          <Avatar src={chat.avatarUrl} alt="" />
           <Content>
             <strong>{chat.name}</strong>
             <span>{chat.lastMessage}</span>

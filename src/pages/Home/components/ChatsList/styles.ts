@@ -31,10 +31,6 @@ const Chat = styled("a", {
   padding: 24,
   display: "flex",
   gap: 16,
-  ">img": {
-    width: 64,
-    borderRadius: 9999,
-  },
   borderBottom: "1px solid $gray-light",
 
   "&:hover": {
