@@ -24,8 +24,7 @@ const messages = [
       avatarUrl: "https://github.com/rlucasmd.png",
     },
     chatId: 123,
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit voluptatibus, beatae debitis aut porro mollitia quam delectus quisquam cupiditate ipsum inventore dicta nemo maiores repudiandae id? Odit velit assumenda ex?",
+    content: "Lorem ip",
   },
 ];
 
@@ -42,6 +41,9 @@ function Chat() {
       <ChatMessagesWrapper>
         <Message chatId={123} sender={messages[0].sender}>
           {messages[0].content}
+        </Message>
+        <Message chatId={123} sender={messages[1].sender} send>
+          {messages[1].content}
         </Message>
       </ChatMessagesWrapper>
     </ChatContainer>

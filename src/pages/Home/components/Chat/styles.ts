@@ -40,6 +40,7 @@ const ChatMessagesWrapper = styled("div", {
   display: "flex",
   flexDirection: "column",
   padding: 32,
+  gap: 16,
 });
 
 export { ChatContainer, ChatHeader, ChatMessagesWrapper };
