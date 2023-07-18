@@ -10,6 +10,7 @@ import { Input } from "../../components/Input";
 import { MagnifyingGlass } from "phosphor-react";
 import { ChatsList } from "./components/ChatsList";
 import { Chat } from "./components/Chat";
+
 function Home() {
   return (
     <HomeContainer>

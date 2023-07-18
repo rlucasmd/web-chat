@@ -2,11 +2,21 @@ import { styled } from "../../../../styles";
 
 const ChatContainer = styled("div", {
   display: "flex",
+  maxHeight: "100%",
   flex: 1,
   flexDirection: "column",
-  background: "$details",
+  background: "$background",
 });
 
+const ChatMessagesWrapper = styled("div", {
+  display: "flex",
+  flexDirection: "column",
+  padding: 32,
+  gap: 16,
+  flex: 1,
+  overflow: "auto",
+  maxHeight: "100%",
+});
 const ChatHeader = styled("header", {
   display: "flex",
   width: "100%",
@@ -35,11 +45,4 @@ const ChatHeader = styled("header", {
   },
 });
 
-const ChatMessagesWrapper = styled("div", {
-  display: "flex",
-  flexDirection: "column",
-  padding: 32,
-  gap: 16,
-});
-
-export { ChatContainer, ChatHeader, ChatMessagesWrapper };
+export { ChatContainer, ChatMessagesWrapper, ChatHeader };

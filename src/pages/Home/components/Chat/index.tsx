@@ -1,7 +1,7 @@
 import { Avatar } from "../../../../components/Avatar";
 import { Message } from "../Message";
+import { MessageInput } from "../MessageInput";
 import { ChatContainer, ChatHeader, ChatMessagesWrapper } from "./styles";
-
 const chatProps = {
   chatImage: "https://github.com/ranieri3232.png",
 };
@@ -42,10 +42,12 @@ function Chat() {
         <Message chatId={123} sender={messages[0].sender}>
           {messages[0].content}
         </Message>
-        <Message chatId={123} sender={messages[1].sender} send>
-          {messages[1].content}
+        <Message chatId={123} sender={messages[0].sender}>
+          {messages[0].content}
         </Message>
       </ChatMessagesWrapper>
+
+      <MessageInput />
     </ChatContainer>
   );
 }

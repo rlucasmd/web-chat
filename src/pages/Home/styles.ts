@@ -11,7 +11,7 @@ const Aside = styled("aside", {
   width: "100%",
   maxWidth: 400,
   flexFlow: "column",
-  overflowX: "auto",
+  maxHeight: "100vh",
 
   borderRight: "1px solid $gray-light",
 });
@@ -33,12 +33,16 @@ const AsideHeader = styled("div", {
 const AsideContent = styled("div", {
   display: "flex",
   width: "100%",
-  flex: 1,
+  maxHeight: "100%",
+  overflow: "auto",
+  "&::-webkit-scrollbar": {
+    display: "none",
+  },
 });
 
 const Main = styled("main", {
   display: "flex",
-  flex: 1,
+  flexDirection: "column",
+  maxHeight: "100vh",
 });
-
 export { HomeContainer, Aside, AsideHeader, AsideContent, Main };
