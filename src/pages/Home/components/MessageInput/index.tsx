@@ -1,9 +1,15 @@
-import { Input, MessageInputContainer } from "./styles";
+import { PaperPlaneTilt } from "phosphor-react";
+import { Input, MessageInputContainer, MessageInputWrapper } from "./styles";
 
 function MessageInput() {
   return (
     <MessageInputContainer>
-      <Input />
+      <MessageInputWrapper>
+        <Input placeholder="Digite aqui sua mensagem!" />
+        <button>
+          <PaperPlaneTilt size={28} weight="fill" />
+        </button>
+      </MessageInputWrapper>
     </MessageInputContainer>
   );
 }

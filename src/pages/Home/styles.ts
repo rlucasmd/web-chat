@@ -22,7 +22,7 @@ const AsideHeader = styled("div", {
   flex: "0 1 auto",
   gap: 16,
   padding: 24,
-  background: "$details",
+  background: "$background",
 
   borderBottom: "1px solid $gray-light",
 

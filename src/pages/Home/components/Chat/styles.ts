@@ -16,13 +16,14 @@ const ChatMessagesWrapper = styled("div", {
   flex: 1,
   overflow: "auto",
   maxHeight: "100%",
+  background: "$details",
 });
 const ChatHeader = styled("header", {
   display: "flex",
   width: "100%",
   height: "fit-content",
   padding: "24px 32px",
-  background: "$details",
+  background: "$background",
   borderBottom: "1px solid $gray-light",
 
   gap: 24,
