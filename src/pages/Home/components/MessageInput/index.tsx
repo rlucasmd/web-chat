@@ -7,7 +7,7 @@ function MessageInput() {
       <MessageInputWrapper>
         <Input placeholder="Digite aqui sua mensagem!" />
         <button>
-          <PaperPlaneTilt size={28} weight="fill" />
+          <PaperPlaneTilt size={32} weight="fill" />
         </button>
       </MessageInputWrapper>
     </MessageInputContainer>

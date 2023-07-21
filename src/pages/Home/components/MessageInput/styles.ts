@@ -13,25 +13,42 @@ const MessageInputWrapper = styled("div", {
   borderRadius: 8,
   display: "flex",
   width: "100%",
-  padding: 8,
+  padding: 16,
+  alignItems: "center",
+  justifyContent: "center",
+  gap: 24,
 
   ">button": {
+    cursor: "pointer",
     border: "none",
-    borderLeft: "1px solid $gray-medium",
     background: "transparent",
-    width: 28,
-    height: 28,
+    flex: 1,
+    color: "$purple",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
   },
 });
 
-const Input = styled("input", {
+const Input = styled("textarea", {
   width: "100%",
   border: "none",
+  fontFamily: "Poppins",
+  fontSize: 16,
+  fontWeight: "regular",
+  color: "$black",
+  height: 48,
+  resize: "none",
+
+  borderRight: "1px solid $gray-medium",
   "&:focus": {
     outline: "none",
+  },
+  "&::placeholder": {
+    fontFamily: "Poppins",
+    fontSize: 16,
+    fontWeight: "regular",
+    color: "$gray-dark",
   },
 });
 
