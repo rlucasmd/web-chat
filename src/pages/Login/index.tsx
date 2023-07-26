@@ -12,7 +12,22 @@ import googleLogo from "../../assets/google-logo.svg";
 import { Input } from "../../components/Input";
 import { Button } from "../../components/Button";
 import { SignIn } from "phosphor-react";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
+import { useState } from "react";
+import { useAuth } from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 function Login() {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+  const [loading, setLoading] = useState(false);
+  async function handleLogin() {
+    setLoading(true);
+
+    const response = await login();
+    console.log(response);
+    setLoading(false);
+    navigate("/home");
+  }
   return (
     <LoginContainer>
       <Aside>
@@ -28,9 +43,9 @@ function Login() {
         <img src={logoImage} alt="" />
 
         <Content>
-          <Button variant="google">
+          <Button variant="google" onClick={handleLogin}>
             <img src={googleLogo} alt="" />
-            Entre com sua conta Google
+            {loading ? <LoadingSpinner /> : "Entre com sua conta Google"}
           </Button>
           <Separator>ou entre com uma senha</Separator>
           <Form>
