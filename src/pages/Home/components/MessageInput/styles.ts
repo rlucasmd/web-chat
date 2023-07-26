@@ -33,9 +33,9 @@ const MessageInputWrapper = styled("div", {
 const Input = styled("textarea", {
   width: "100%",
   border: "none",
-  fontFamily: "Poppins",
+  fontFamily: "Roboto, sans-serif",
   fontSize: 16,
-  fontWeight: "regular",
+  fontWeight: 400,
   color: "$black",
   height: 48,
   resize: "none",
@@ -45,9 +45,9 @@ const Input = styled("textarea", {
     outline: "none",
   },
   "&::placeholder": {
-    fontFamily: "Poppins",
+    fontFamily: "Roboto",
     fontSize: 16,
-    fontWeight: "regular",
+    fontWeight: 400,
     color: "$gray-dark",
   },
 });

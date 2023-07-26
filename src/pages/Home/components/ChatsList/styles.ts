@@ -13,13 +13,13 @@ const Content = styled("div", {
   flexDirection: "column",
   gap: 8,
   ">strong": {
-    fontFamily: "Poppins",
+    fontFamily: "Roboto",
     fontWeight: 700,
     fontSize: 24,
     color: "$black",
   },
   ">span": {
-    fontFamily: "Poppins",
+    fontFamily: "Roboto",
     fontWeight: 400,
     fontSize: 16,
     color: "$gray-dark",
