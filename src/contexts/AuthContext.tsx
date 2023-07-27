@@ -13,6 +13,7 @@ interface IAuthContext {
   login: () => Promise<IUser>;
   logout: () => void;
   user: IUser | undefined;
+  signInWithGoogle: () => void;
 }
 
 const AuthContext = createContext({} as IAuthContext);
@@ -35,12 +36,16 @@ function AuthContextProvider({ children }: IAuthContextProvider) {
     setUser(undefined);
     console.log("User Logout");
   }
+  function signInWithGoogle() {
+    console.log("signInWithGoogle");
+  }
   return (
     <AuthContext.Provider
       value={{
         user,
         login,
         logout,
+        signInWithGoogle,
       }}
     >
       {children}
