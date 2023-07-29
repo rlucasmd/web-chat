@@ -22,6 +22,11 @@ const ButtonContainer = styled("button", {
     filter: "brightness(0.8)",
   },
 
+  "&:disabled": {
+    filter: "brightness(0.7)",
+    cursor: "not-allowed",
+  },
+
   transition: "0.3s",
 
   variants: {

@@ -18,15 +18,19 @@ import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 function Login() {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, signInWithGoogle, logout } = useAuth();
   const [loading, setLoading] = useState(false);
   async function handleLogin() {
     setLoading(true);
-
-    const response = await login();
-    console.log(response);
-    setLoading(false);
-    navigate("/home");
+    try {
+      const response = await signInWithGoogle();
+      console.log(response);
+      navigate("/home");
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
   }
   return (
     <LoginContainer>
@@ -43,9 +47,15 @@ function Login() {
         <img src={logoImage} alt="" />
 
         <Content>
-          <Button variant="google" onClick={handleLogin}>
-            <img src={googleLogo} alt="" />
-            {loading ? <LoadingSpinner /> : "Entre com sua conta Google"}
+          <Button variant="google" onClick={handleLogin} disabled={loading}>
+            {loading ? (
+              <LoadingSpinner />
+            ) : (
+              <>
+                <img src={googleLogo} alt="" />
+                Entre com sua conta Google
+              </>
+            )}
           </Button>
           <Separator>ou entre com uma senha</Separator>
           <Form>
@@ -61,7 +71,7 @@ function Login() {
                 type="password"
               />
             </div>
-            <Button type="button">
+            <Button type="button" onClick={logout}>
               <SignIn size={24} weight="bold" />
               Acessar
             </Button>
