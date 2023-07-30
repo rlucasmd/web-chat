@@ -1,10 +1,23 @@
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider, User, signInWithPopup } from "firebase/auth";
 import { ReactNode, createContext, useEffect, useState } from "react";
-import { auth } from "../services/firebase";
+import { auth, database } from "../services/firebase";
+import {
+  QueryDocumentSnapshot,
+  Timestamp,
+  doc,
+  getDoc,
+  serverTimestamp,
+  setDoc,
+} from "firebase/firestore";
 
-interface IUser {
+interface IUserData {
   name: string | null;
-  avatar_url: string | null;
+  avatarUrl?: string;
+  bio: string;
+  createdAt: Timestamp;
+}
+
+interface IUser extends IUserData {
   uid: string;
 }
 
@@ -13,40 +26,53 @@ interface IAuthContextProvider {
 }
 
 interface IAuthContext {
-  login: () => Promise<IUser>;
+  login: () => void;
   logout: () => void;
   user: IUser | undefined;
   signInWithGoogle: () => Promise<void>;
 }
 
 const AuthContext = createContext({} as IAuthContext);
+const converter = {
+  toFirestore: (data: IUserData) => data,
+  fromFirestore: (snap: QueryDocumentSnapshot) => snap.data() as IUserData,
+};
 
 function AuthContextProvider({ children }: IAuthContextProvider) {
   const [user, setUser] = useState<IUser | undefined>();
-  async function login() {
-    return new Promise<IUser>((resolve) => {
-      // const userData = {
-      //   name: "Ranieri Lucas",
-      //   avatar_url: "https://github.com/ranieri3232.png",
-      // };
-      // setTimeout(() => {
-      //   setUser(userData);
-      //   resolve(userData);
-      // }, 2000);
-    });
+  function login() {
+    console.log("login");
   }
   function logout() {
     setUser(undefined);
     auth.signOut();
     console.log("User Logout");
   }
+
+  async function fetchUserData(user: User) {
+    try {
+      console.log("fetching data");
+      const docRef = doc(database, "users", user.uid).withConverter(converter);
+      const docSnap = await getDoc(docRef);
+      if (!docSnap.exists()) {
+        await setDoc(docRef, {
+          name: user.displayName ?? "Duck Dodgers",
+          bio: "Lorem ipsum",
+          createdAt: serverTimestamp(),
+        });
+      }
+      const response = await getDoc(docRef);
+      const data = response.data();
+      if (data) setUser({ ...data, uid: user.uid });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((state) => {
       if (!state) return;
-
-      const { displayName, photoURL, uid } = state;
-      setUser({ uid, name: displayName, avatar_url: photoURL });
-      console.log({ displayName, photoURL, uid });
+      fetchUserData(state);
     });
 
     return () => {
@@ -54,14 +80,12 @@ function AuthContextProvider({ children }: IAuthContextProvider) {
     };
   }, []);
   async function signInWithGoogle() {
-    // eslint-disable-next-line no-useless-catch
     try {
       const provider = new GoogleAuthProvider();
       provider.setCustomParameters({ prompt: "select_account " });
       const response = await signInWithPopup(auth, provider);
-      console.log(response);
-      console.log("signInWithGoogle");
     } catch (err) {
+      console.log(err);
       throw err;
     }
   }
