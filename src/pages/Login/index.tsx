@@ -13,25 +13,30 @@ import { Input } from "../../components/Input";
 import { Button } from "../../components/Button";
 import { SignIn } from "phosphor-react";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 function Login() {
   const navigate = useNavigate();
-  const { login, signInWithGoogle, logout } = useAuth();
+  const { signInWithGoogle, logout, user } = useAuth();
   const [loading, setLoading] = useState(false);
+
   async function handleLogin() {
     setLoading(true);
     try {
-      const response = await signInWithGoogle();
-      console.log(response);
-      navigate("/home");
+      await signInWithGoogle();
+      // navigate("/home/123");
     } catch (err) {
       console.log(err);
     } finally {
       setLoading(false);
     }
   }
+  useEffect(() => {
+    console.log(user);
+    if (user) navigate("/home");
+  }, [user]);
+
   return (
     <LoginContainer>
       <Aside>
@@ -71,7 +76,7 @@ function Login() {
                 type="password"
               />
             </div>
-            <Button type="button" onClick={logout}>
+            <Button type="button" onClick={logout} disabled={loading}>
               <SignIn size={24} weight="bold" />
               Acessar
             </Button>

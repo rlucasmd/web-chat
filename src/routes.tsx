@@ -1,7 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
-// import { PrivateRoute } from "./components/Private";
 import { ReactNode } from "react";
 import { useAuth } from "./hooks/useAuth";
 
@@ -21,15 +20,13 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
   return children;
 };
 
-export { PrivateRoute };
-
 function Router() {
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/login" element={<Login />} />
       <Route
-        path="/home"
+        path="/home/:chatId?"
         element={
           <PrivateRoute>
             <Home />

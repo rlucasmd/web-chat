@@ -9,6 +9,7 @@ import {
   serverTimestamp,
   setDoc,
 } from "firebase/firestore";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 interface IUserData {
   name: string | null;
@@ -28,7 +29,7 @@ interface IAuthContextProvider {
 interface IAuthContext {
   login: () => void;
   logout: () => void;
-  user: IUser | undefined;
+  user: IUser | null;
   signInWithGoogle: () => Promise<void>;
 }
 
@@ -39,19 +40,19 @@ const converter = {
 };
 
 function AuthContextProvider({ children }: IAuthContextProvider) {
-  const [user, setUser] = useState<IUser | undefined>();
+  const [user, setUser] = useLocalStorage<IUser | null>("@web-chat/user", null);
   function login() {
     console.log("login");
   }
   function logout() {
-    setUser(undefined);
+    setUser(null);
     auth.signOut();
-    console.log("User Logout");
+    // console.log("User Logout");
   }
 
   async function fetchUserData(user: User) {
     try {
-      console.log("fetching data");
+      // console.log("fetching data");
       const docRef = doc(database, "users", user.uid).withConverter(converter);
       const docSnap = await getDoc(docRef);
       if (!docSnap.exists()) {
@@ -64,6 +65,7 @@ function AuthContextProvider({ children }: IAuthContextProvider) {
       const response = await getDoc(docRef);
       const data = response.data();
       if (data) setUser({ ...data, uid: user.uid });
+      console.warn("set User Data");
     } catch (err) {
       console.log(err);
     }
@@ -73,6 +75,7 @@ function AuthContextProvider({ children }: IAuthContextProvider) {
     const unsubscribe = auth.onAuthStateChanged((state) => {
       if (!state) return;
       fetchUserData(state);
+      console.warn("AuthStateChanged");
     });
 
     return () => {
@@ -84,6 +87,7 @@ function AuthContextProvider({ children }: IAuthContextProvider) {
       const provider = new GoogleAuthProvider();
       provider.setCustomParameters({ prompt: "select_account " });
       const response = await signInWithPopup(auth, provider);
+      console.warn(response);
     } catch (err) {
       console.log(err);
       throw err;
