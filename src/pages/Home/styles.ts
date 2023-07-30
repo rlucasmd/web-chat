@@ -26,8 +26,24 @@ const AsideHeader = styled("div", {
 
   borderBottom: "1px solid $gray-light",
 
-  ">img": {
-    maxWidth: 170,
+  ">div": {
+    display: "flex",
+    justifyContent: "space-between",
+    img: {
+      maxWidth: 170,
+    },
+  },
+});
+
+const ActionsButtons = styled("div", {
+  display: "flex",
+  alignItems: "center",
+  gap: 8,
+  button: {
+    backgroundColor: "$background",
+    color: "$black",
+    height: "fit-content",
+    padding: 8,
   },
 });
 const AsideContent = styled("div", {
@@ -45,4 +61,11 @@ const Main = styled("main", {
   flexDirection: "column",
   maxHeight: "100vh",
 });
-export { HomeContainer, Aside, AsideHeader, AsideContent, Main };
+export {
+  HomeContainer,
+  Aside,
+  AsideHeader,
+  ActionsButtons,
+  AsideContent,
+  Main,
+};
