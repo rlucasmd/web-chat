@@ -1,4 +1,4 @@
-import { ComponentProps, ReactNode } from "react";
+import { ComponentProps } from "react";
 import { ButtonContainer } from "./styles";
 
 type ButtonProps = ComponentProps<typeof ButtonContainer>;
