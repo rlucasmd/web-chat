@@ -44,7 +44,7 @@ function AuthContextProvider({ children }: IAuthContextProvider) {
   async function fetchOrSaveUserData(user: User) {
     try {
       // console.log("fetching data");
-      const docRef = doc(database, "users", user.uid).withConverter(converter);
+      const docRef = doc(database, "user", user.uid).withConverter(converter);
       const docSnap = await getDoc(docRef);
       if (!docSnap.exists()) {
         await setDoc(docRef, {
