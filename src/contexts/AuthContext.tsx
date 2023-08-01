@@ -1,26 +1,18 @@
 import { GoogleAuthProvider, User, signInWithPopup } from "firebase/auth";
 import { ReactNode, createContext, useEffect, useState } from "react";
 import { auth, database } from "../services/firebase";
-import {
-  QueryDocumentSnapshot,
-  Timestamp,
-  doc,
-  getDoc,
-  serverTimestamp,
-  setDoc,
-} from "firebase/firestore";
-import { useLocalStorage } from "../hooks/useLocalStorage";
+import { QueryDocumentSnapshot, doc, getDoc, setDoc } from "firebase/firestore";
 
-interface IUserData {
-  name: string | null;
-  avatarUrl?: string;
-  bio: string;
-  createdAt: Timestamp;
-}
+type IUserData = {
+  displayName: string;
+  photoURL: string;
+  email: string;
+  groups: string[];
+};
 
-interface IUser extends IUserData {
+type IUser = IUserData & {
   uid: string;
-}
+};
 
 interface IAuthContextProvider {
   children: ReactNode;
@@ -40,42 +32,40 @@ const converter = {
 };
 
 function AuthContextProvider({ children }: IAuthContextProvider) {
-  const [user, setUser] = useLocalStorage<IUser | null>("@web-chat/user", null);
+  const [user, setUser] = useState<IUser | null>(null);
   function login() {
     console.log("login");
   }
   function logout() {
     setUser(null);
     auth.signOut();
-    // console.log("User Logout");
   }
 
-  async function fetchUserData(user: User) {
+  async function fetchOrSaveUserData(user: User) {
     try {
       // console.log("fetching data");
       const docRef = doc(database, "users", user.uid).withConverter(converter);
       const docSnap = await getDoc(docRef);
       if (!docSnap.exists()) {
         await setDoc(docRef, {
-          name: user.displayName ?? "Duck Dodgers",
-          bio: "Lorem ipsum",
-          createdAt: serverTimestamp(),
+          displayName: user.displayName!,
+          email: user.email!,
+          photoURL: user.photoURL!,
+          groups: [],
         });
       }
       const response = await getDoc(docRef);
       const data = response.data();
       if (data) setUser({ ...data, uid: user.uid });
-      console.warn("set User Data");
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   }
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((state) => {
       if (!state) return;
-      fetchUserData(state);
-      console.warn("AuthStateChanged");
+      fetchOrSaveUserData(state);
     });
 
     return () => {
@@ -86,10 +76,10 @@ function AuthContextProvider({ children }: IAuthContextProvider) {
     try {
       const provider = new GoogleAuthProvider();
       provider.setCustomParameters({ prompt: "select_account " });
-      const response = await signInWithPopup(auth, provider);
-      console.warn(response);
+      await signInWithPopup(auth, provider);
+      // console.warn(response);
     } catch (err) {
-      console.log(err);
+      console.error(err);
       throw err;
     }
   }
