@@ -18,6 +18,20 @@ const LoadingSpinner = styled("span", {
   borderRight: "3px solid transparent",
   boxSizing: "border-box",
   animation: `${rotation} 1s linear infinite`,
+  variants: {
+    color: {
+      white: {
+        borderTop: "3px solid $white",
+      },
+      purple: {
+        borderTop: "3px solid $purple",
+      },
+    },
+  },
+
+  defaultVariants: {
+    color: "white",
+  },
 });
 
 export { LoadingSpinner };
