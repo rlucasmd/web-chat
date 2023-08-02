@@ -1,4 +1,5 @@
 import { styled } from "../../../../styles";
+import { Link } from "react-router-dom";
 
 const ChatsContainer = styled("div", {
   display: "flex",
@@ -26,7 +27,7 @@ const Content = styled("div", {
   },
 });
 
-const Chat = styled("a", {
+const Chat = styled(Link, {
   background: "$background",
   cursor: "pointer",
   textDecoration: "none",

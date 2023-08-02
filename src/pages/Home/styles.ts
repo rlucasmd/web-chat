@@ -4,6 +4,8 @@ const HomeContainer = styled("div", {
   display: "flex",
   flexDirection: "row",
   flex: 1,
+  height: "100vh",
+  width: "100%",
 });
 
 const Aside = styled("aside", {
@@ -11,7 +13,7 @@ const Aside = styled("aside", {
   width: "100%",
   maxWidth: 400,
   flexFlow: "column",
-  maxHeight: "100vh",
+  height: "100%",
 
   borderRight: "1px solid $gray-light",
 });
@@ -60,6 +62,7 @@ const Main = styled("main", {
   display: "flex",
   flexDirection: "column",
   maxHeight: "100vh",
+  width: "100%",
 });
 export {
   HomeContainer,

@@ -1,7 +1,11 @@
+import { useParams } from "react-router-dom";
 import { Avatar } from "../../../../components/Avatar";
+import { useMessages } from "../../../../hooks/useMessages";
 import { Message } from "../Message";
 import { MessageInput } from "../MessageInput";
 import { ChatContainer, ChatHeader, ChatMessagesWrapper } from "./styles";
+import { useChats } from "../../../../hooks/useChats";
+import { LoadingSpinner } from "../../../../components/LoadingSpinner";
 const chatProps = {
   chatImage: "https://github.com/ranieri3232.png",
 };
@@ -29,25 +33,38 @@ const messages = [
 ];
 
 function Chat() {
+  const { chatId } = useParams();
+  const { chats } = useChats();
+  const chatData = chats.find((chat) => chat.id === chatId);
+  // const chatData = undefined;
+  console.log(chatData);
+  // useMessages("sDB5t0zLh7bbGSCBqxwJ");
+  // if (!chatData) return <LoadingSpinner color="purple" />;
   return (
     <ChatContainer>
-      <ChatHeader>
-        <Avatar src={chatProps.chatImage} alt="" />
-        <div>
-          <strong>Manuelito Gomes</strong>
-          <span>Online</span>
-        </div>
-      </ChatHeader>
-      <ChatMessagesWrapper>
-        <Message chatId={123} sender={messages[0].sender}>
-          {messages[0].content}
-        </Message>
-        <Message chatId={123} sender={messages[0].sender}>
-          {messages[0].content}
-        </Message>
-      </ChatMessagesWrapper>
+      {chatData ? (
+        <>
+          <ChatHeader>
+            <Avatar alt="" />
+            <div>
+              <strong>{chatData.name}</strong>
+              <span>Online</span>
+            </div>
+          </ChatHeader>
+          <ChatMessagesWrapper>
+            <Message chatId={123} sender={messages[0].sender}>
+              {messages[0].content}
+            </Message>
+            <Message chatId={123} sender={messages[0].sender}>
+              {messages[0].content}
+            </Message>
+          </ChatMessagesWrapper>
 
-      <MessageInput />
+          <MessageInput />
+        </>
+      ) : (
+        <LoadingSpinner color="purple" />
+      )}
     </ChatContainer>
   );
 }

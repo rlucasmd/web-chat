@@ -44,7 +44,6 @@ function useChats() {
       collection(database, "chat"),
       where("members", "array-contains", user.uid),
     ).withConverter(converter);
-    // console.log("ola");
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const chatsData: IChat[] = [];
@@ -61,10 +60,6 @@ function useChats() {
       unsubscribe();
     };
   }, [user]);
-
-  useEffect(() => {
-    console.log(chats);
-  }, [chats]);
 
   return { chats };
 }

@@ -3,9 +3,12 @@ import { styled } from "../../../../styles";
 const ChatContainer = styled("div", {
   display: "flex",
   maxHeight: "100%",
+  width: "100%",
   flex: 1,
   flexDirection: "column",
   background: "$background",
+  alignItems: "center",
+  justifyContent: "center",
 });
 
 const ChatMessagesWrapper = styled("div", {

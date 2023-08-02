@@ -11,17 +11,18 @@ import { Input } from "../../components/Input";
 import { Gear, MagnifyingGlass, SignOut } from "phosphor-react";
 import { ChatsList } from "./components/ChatsList";
 import { Chat } from "./components/Chat";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import { Button } from "../../components/Button";
 import { useAuth } from "../../hooks/useAuth";
+// import { useChats } from "../../hooks/useChats";
 
 function Home() {
-  const { chatId } = useParams();
+  // const { chatId } = useParams();
   const { logout } = useAuth();
+  // const { chats } = useChats("I6iKY52tzcgvVcFCYVhl2TBw2pL2");
   function handleLogout() {
     logout();
   }
-  // console.log(chatId);
   return (
     <HomeContainer>
       <Aside>
