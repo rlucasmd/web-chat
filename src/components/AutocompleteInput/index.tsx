@@ -20,7 +20,7 @@ function AutocompleteInput() {
     "azeitona",
   ];
   const [selectedValue, setSelectedValue] = useState("");
-  const [showSuggestions, setShowSuggestions] = useState(true);
+  const [showSuggestions, setShowSuggestions] = useState(false);
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     setShowSuggestions(true);
@@ -38,7 +38,9 @@ function AutocompleteInput() {
     setSelectedValue(suggestion);
     setShowSuggestions(false);
   }
-  // console.log(filteredData);
+  function handleLostFocus(e: React.FocusEvent<HTMLInputElement>) {
+    console.log(e.currentTarget);
+  }
   return (
     <Autosuggestions>
       <FormControl show={showSuggestions}>
@@ -49,6 +51,7 @@ function AutocompleteInput() {
           value={selectedValue}
           onChange={(e) => handleChange(e)}
           onFocus={(e) => handleFocus(e)}
+          onBlur={(e) => handleLostFocus(e)}
         />
       </FormControl>
       <Suggestions show={showSuggestions}>
