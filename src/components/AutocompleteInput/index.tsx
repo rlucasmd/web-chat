@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import {
   Autosuggestions,
   FormControl,
@@ -6,61 +6,88 @@ import {
   Item,
   Suggestions,
 } from "./styles";
-import { MagnifyingGlass } from "phosphor-react";
+import { MagnifyingGlass, X } from "phosphor-react";
+import { Button } from "../Button";
+import { Avatar } from "../Avatar";
 
-function AutocompleteInput() {
-  const suggestions = [
-    "banana",
-    "maça",
-    "pera",
-    "uva",
-    "abacate",
-    "abacaxi",
-    "beterraba",
-    "azeitona",
-  ];
+type IUser = {
+  id: string;
+  displayName: string;
+  photoURL: string;
+  email: string;
+};
+
+type IAutocomplete = {
+  data: IUser[];
+  onSelectAUser: (user: IUser) => void;
+};
+
+function AutocompleteInput({ data, onSelectAUser }: IAutocomplete) {
   const [selectedValue, setSelectedValue] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     setShowSuggestions(true);
+
     setSelectedValue(e.target.value);
   }
-  const filteredData = suggestions.filter((suggestion) =>
-    suggestion.includes(selectedValue),
+  const filteredData = data.filter((suggestion) =>
+    suggestion.displayName.startsWith(selectedValue),
   );
-  function handleFocus(e: React.FocusEvent<HTMLInputElement>) {
-    if (filteredData.length === 1 && selectedValue === filteredData[0]) return;
-
-    setShowSuggestions(true);
-  }
-  function handleSelectSuggestion(suggestion: string) {
-    setSelectedValue(suggestion);
+  function handleSelectSuggestion(suggestion: IUser) {
+    onSelectAUser(suggestion);
+    setSelectedValue(suggestion.displayName);
     setShowSuggestions(false);
   }
-  function handleLostFocus(e: React.FocusEvent<HTMLInputElement>) {
-    console.log(e.currentTarget);
+
+  function separateHighlightedPart(suggestion: string, highlighted: string) {
+    const highlightedLength = highlighted.length;
+    const substring = suggestion.substring(
+      highlightedLength,
+      suggestion.length,
+    );
+
+    return substring;
   }
+
+  function clearSelection() {
+    setShowSuggestions(false);
+    setSelectedValue("");
+  }
+
   return (
     <Autosuggestions>
       <FormControl show={showSuggestions}>
         <MagnifyingGlass size={16} />
         <Input
-          type="search"
+          type="text"
           placeholder="Digite um nome"
           value={selectedValue}
           onChange={(e) => handleChange(e)}
-          onFocus={(e) => handleFocus(e)}
-          onBlur={(e) => handleLostFocus(e)}
         />
+        <Button type="button" onClick={clearSelection}>
+          <X weight="bold" />
+        </Button>
       </FormControl>
       <Suggestions show={showSuggestions}>
         {filteredData.map((suggestion) => (
           <Item
-            key={suggestion}
+            key={suggestion.id}
             onClick={() => handleSelectSuggestion(suggestion)}
           >
-            {suggestion}
+            <Avatar src={suggestion.photoURL} />
+            <div>
+              <div>
+                <strong>{selectedValue}</strong>
+                <span>
+                  {separateHighlightedPart(
+                    suggestion.displayName,
+                    selectedValue,
+                  )}
+                </span>
+              </div>
+              <p> {suggestion.email}</p>
+            </div>
           </Item>
         ))}
       </Suggestions>

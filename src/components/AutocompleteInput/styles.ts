@@ -9,6 +9,7 @@ const Autosuggestions = styled("div", {
 });
 
 const FormControl = styled("div", {
+  overflow: "hidden",
   display: "flex",
   gap: 8,
   padding: "8px 16px",
@@ -18,6 +19,16 @@ const FormControl = styled("div", {
   alignItems: "center",
   color: "$black",
   background: "$details",
+  position: "relative",
+
+  button: {
+    borderRadius: 0,
+    position: "absolute",
+    top: 0,
+    right: 0,
+    width: 50,
+    background: "transparent",
+  },
 
   svg: {
     color: "$gray-medium",
@@ -26,6 +37,11 @@ const FormControl = styled("div", {
     borderColor: "$gray-dark",
     svg: {
       color: "$gray-dark",
+    },
+    button: {
+      "&:hover": {
+        background: "$gray-light",
+      },
     },
   },
   variants: {
@@ -82,6 +98,9 @@ const Suggestions = styled("ul", {
 const Item = styled("li", {
   padding: "16px 16px",
   cursor: "pointer",
+  display: "flex",
+  gap: 16,
+  alignItems: "center",
 
   "&:hover": {
     background: "$gray-light",
