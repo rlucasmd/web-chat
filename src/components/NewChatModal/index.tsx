@@ -2,7 +2,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import {
   CloseButton,
   ModalContainer,
-  ModalContent,
+  ModalForm,
   ModalTitle,
   Overlay,
 } from "./styles";
@@ -11,6 +11,9 @@ import { useEffect, useState } from "react";
 import { QueryDocumentSnapshot, collection, getDocs } from "firebase/firestore";
 import { database } from "../../services/firebase";
 import { AutocompleteInput } from "../AutocompleteInput";
+import { LoadingSpinner } from "../LoadingSpinner";
+import { Input } from "../Input";
+import { UserBadge } from "./components/UserBadge";
 
 type IUserData = {
   displayName: string;
@@ -28,8 +31,17 @@ const converter = {
 };
 
 function NewChatModal() {
+  const [userList, setUserList] = useState<IUser[]>([]);
+  const [selectedUsers, setSelectedUsers] = useState<IUser[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  function handleSelectAUser(user: IUser) {
+    console.log(user);
+  }
+
   async function fetchData() {
     console.log("fetch data");
+    setLoading(true);
     const userRef = collection(database, "user").withConverter(converter);
     const docsRef = await getDocs(userRef);
 
@@ -40,13 +52,11 @@ function NewChatModal() {
         id: doc.id,
         ...doc.data(),
       });
-      // console.log(doc.data());
     });
     setUserList(users);
-    // select;
-    // userRef.
+    setLoading(false);
   }
-  const [userList, setUserList] = useState<IUser[]>([]);
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -58,7 +68,19 @@ function NewChatModal() {
           <X size={24} />
         </CloseButton>
         <ModalTitle>Novo grupo ou conversa</ModalTitle>
-        <AutocompleteInput />
+        <ModalForm>
+          <Input placeholder="Digite um nome" />
+          {loading ? (
+            <LoadingSpinner />
+          ) : (
+            <AutocompleteInput
+              data={userList}
+              onSelectAUser={handleSelectAUser}
+            />
+          )}
+          <h3>Pessoas</h3>
+          <UserBadge />
+        </ModalForm>
       </ModalContainer>
     </Dialog.Portal>
   );
