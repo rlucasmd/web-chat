@@ -23,6 +23,16 @@ const UserBadgeContainer = styled("div", {
   button: {
     height: 48,
     width: 48,
+    borderRadius: 999,
+    background: "transparent",
+
+    "&:hover": {
+      background: "$gray-light",
+    },
+
+    svg: {
+      color: "$gray-dark",
+    },
   },
 });
 

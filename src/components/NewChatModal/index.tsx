@@ -5,15 +5,24 @@ import {
   ModalForm,
   ModalTitle,
   Overlay,
+  UsersListContainer,
 } from "./styles";
 import { X } from "phosphor-react";
 import { useEffect, useState } from "react";
-import { QueryDocumentSnapshot, collection, getDocs } from "firebase/firestore";
+import {
+  QueryDocumentSnapshot,
+  collection,
+  documentId,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import { database } from "../../services/firebase";
 import { AutocompleteInput } from "../AutocompleteInput";
 import { LoadingSpinner } from "../LoadingSpinner";
 import { Input } from "../Input";
 import { UserBadge } from "./components/UserBadge";
+import { useAuth } from "../../hooks/useAuth";
 
 type IUserData = {
   displayName: string;
@@ -31,18 +40,29 @@ const converter = {
 };
 
 function NewChatModal() {
+  const { user } = useAuth();
   const [userList, setUserList] = useState<IUser[]>([]);
   const [selectedUsers, setSelectedUsers] = useState<IUser[]>([]);
   const [loading, setLoading] = useState(false);
 
   function handleSelectAUser(user: IUser) {
-    console.log(user);
+    const findUser = selectedUsers.find(
+      (selectedUser) => selectedUser.id === user.id,
+    );
+    if (findUser) return;
+    setSelectedUsers((state) => [...state, user]);
+  }
+  function handleRemoveASelectedUser(id: string) {
+    setSelectedUsers((state) => state.filter((user) => user.id !== id));
   }
 
   async function fetchData() {
     console.log("fetch data");
     setLoading(true);
-    const userRef = collection(database, "user").withConverter(converter);
+    const userRef = query(
+      collection(database, "user"),
+      where(documentId(), "!=", user?.uid),
+    ).withConverter(converter);
     const docsRef = await getDocs(userRef);
 
     const users: IUser[] = [];
@@ -60,6 +80,7 @@ function NewChatModal() {
   useEffect(() => {
     fetchData();
   }, []);
+  const isCreatingAGroup = selectedUsers.length > 1;
   return (
     <Dialog.Portal>
       <Overlay />
@@ -67,9 +88,10 @@ function NewChatModal() {
         <CloseButton>
           <X size={24} />
         </CloseButton>
-        <ModalTitle>Novo grupo ou conversa</ModalTitle>
+        <ModalTitle>
+          {isCreatingAGroup ? "Novo grupo" : "Nova Conversa"}
+        </ModalTitle>
         <ModalForm>
-          <Input placeholder="Digite um nome" />
           {loading ? (
             <LoadingSpinner />
           ) : (
@@ -78,8 +100,21 @@ function NewChatModal() {
               onSelectAUser={handleSelectAUser}
             />
           )}
+
           <h3>Pessoas</h3>
-          <UserBadge />
+          <UsersListContainer>
+            {selectedUsers.map((user) => (
+              <UserBadge
+                key={user.id}
+                displayName={user.displayName}
+                photoURL={user.photoURL}
+                onRequestClose={() => handleRemoveASelectedUser(user.id)}
+              />
+            ))}
+          </UsersListContainer>
+          {isCreatingAGroup && (
+            <Input placeholder="Digite um nome para o grupo" />
+          )}
         </ModalForm>
       </ModalContainer>
     </Dialog.Portal>

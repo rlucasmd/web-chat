@@ -2,12 +2,18 @@ import { X } from "phosphor-react";
 import { Button } from "../../../Button";
 import { UserBadgeContainer } from "./styles";
 
-function UserBadge() {
+type IUserBadgeProps = {
+  displayName: string;
+  photoURL: string;
+  onRequestClose: () => void;
+};
+
+function UserBadge(props: IUserBadgeProps) {
   return (
     <UserBadgeContainer>
-      <img src="https://github.com/ranieri3232.png" alt="" />
-      <p>Ranieri Lucas</p>
-      <Button type="button">
+      <img src={props.photoURL} alt="" />
+      <p>{props.displayName}</p>
+      <Button type="button" onClick={props.onRequestClose}>
         <X />
       </Button>
     </UserBadgeContainer>

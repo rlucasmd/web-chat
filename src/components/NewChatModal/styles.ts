@@ -47,4 +47,19 @@ const Overlay = styled(Dialog.Overlay, {
   background: "rgba(0, 0, 0, 0.75)",
 });
 
-export { Overlay, ModalContainer, CloseButton, ModalTitle, ModalForm, Input };
+const UsersListContainer = styled("div", {
+  display: "flex",
+  width: "100%",
+  flexWrap: "wrap",
+  gap: 16,
+});
+
+export {
+  Overlay,
+  ModalContainer,
+  CloseButton,
+  ModalTitle,
+  ModalForm,
+  Input,
+  UsersListContainer,
+};
