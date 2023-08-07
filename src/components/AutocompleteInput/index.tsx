@@ -36,7 +36,7 @@ function AutocompleteInput({ data, onSelectAUser }: IAutocomplete) {
   );
   function handleSelectSuggestion(suggestion: IUser) {
     onSelectAUser(suggestion);
-    setSelectedValue(suggestion.displayName);
+    setSelectedValue("");
     setShowSuggestions(false);
   }
 

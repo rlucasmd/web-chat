@@ -4,7 +4,7 @@ const Autosuggestions = styled("div", {
   display: "block",
   background: "$details",
   // flexDirection: "column",
-  maxWidth: 400,
+  width: "100%",
   filter: "drop-shadow(rgba(0, 0, 0, 0.25) 2px 4px 2px)",
 });
 
@@ -96,11 +96,17 @@ const Suggestions = styled("ul", {
 });
 
 const Item = styled("li", {
-  padding: "16px 16px",
+  padding: "8px 8px",
   cursor: "pointer",
   display: "flex",
-  gap: 16,
+  gap: 8,
   alignItems: "center",
+
+  img: {
+    width: 48,
+    height: 48,
+    borderRadius: 999,
+  },
 
   "&:hover": {
     background: "$gray-light",
