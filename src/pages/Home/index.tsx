@@ -8,12 +8,15 @@ import {
 } from "./styles";
 import logoImage from "../../assets/logo.svg";
 import { Input } from "../../components/Input";
-import { Gear, MagnifyingGlass, SignOut } from "phosphor-react";
+import { Gear, MagnifyingGlass, PlusCircle, SignOut } from "phosphor-react";
 import { ChatsList } from "./components/ChatsList";
 import { Chat } from "./components/Chat";
 // import { useParams } from "react-router-dom";
 import { Button } from "../../components/Button";
 import { useAuth } from "../../hooks/useAuth";
+import { AutocompleteInput } from "../../components/AutocompleteInput";
+import * as Dialog from "@radix-ui/react-dialog";
+import { NewChatModal } from "../../components/NewChatModal";
 // import { useChats } from "../../hooks/useChats";
 
 function Home() {
@@ -30,9 +33,14 @@ function Home() {
           <div>
             <img src={logoImage} alt="" />
             <ActionsButtons>
-              <Button type="button">
-                <Gear size={24} />
-              </Button>
+              <Dialog.Root>
+                <Dialog.Trigger asChild>
+                  <Button type="button">
+                    <PlusCircle size={24} />
+                  </Button>
+                </Dialog.Trigger>
+                <NewChatModal />
+              </Dialog.Root>
               <Button type="button" onClick={handleLogout}>
                 <SignOut size={24} />
               </Button>
@@ -48,7 +56,8 @@ function Home() {
         </AsideContent>
       </Aside>
       <Main>
-        <Chat />
+        {/* <Chat /> */}
+        {/* <AutocompleteInput /> */}
       </Main>
     </HomeContainer>
   );
