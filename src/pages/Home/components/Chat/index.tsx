@@ -45,7 +45,7 @@ function Chat() {
       {chatData ? (
         <>
           <ChatHeader>
-            <Avatar alt="" />
+            <Avatar alt="" src={chatData.photoURL} />
             <div>
               <strong>{chatData.name}</strong>
               <span>Online</span>

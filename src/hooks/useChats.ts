@@ -23,6 +23,7 @@ type IChatData = {
   type: number;
   user: string[];
   name: string;
+  photoURL: string;
 };
 
 type IChat = IChatData & {

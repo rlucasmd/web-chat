@@ -56,7 +56,7 @@ function Home() {
         </AsideContent>
       </Aside>
       <Main>
-        {/* <Chat /> */}
+        <Chat />
         {/* <AutocompleteInput /> */}
       </Main>
     </HomeContainer>
