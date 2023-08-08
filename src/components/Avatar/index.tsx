@@ -1,14 +1,21 @@
-import { ImgHTMLAttributes } from "react";
-import { AvatarContainer } from "./styles";
+import { ComponentProps } from "react";
+import { AvatarContainer, AvatarFallback, AvatarImage } from "./styles";
+import { User } from "phosphor-react";
 
-type AvatarProps = ImgHTMLAttributes<HTMLImageElement>;
+export type AvatarProps = ComponentProps<typeof AvatarImage>;
 
-function Avatar({ ...rest }: AvatarProps) {
+function Avatar(props: AvatarProps) {
   return (
     <AvatarContainer>
-      <img {...rest} />
+      <AvatarImage {...props} />
+
+      <AvatarFallback delayMs={600}>
+        <User />
+      </AvatarFallback>
     </AvatarContainer>
   );
 }
+
+Avatar.displayName = "Avatar";
 
 export { Avatar };

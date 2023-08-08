@@ -1,22 +1,34 @@
+import * as Avatar from "@radix-ui/react-avatar";
 import { styled } from "../../styles";
 
-const AvatarContainer = styled("div", {
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  minWidth: 64,
+export const AvatarContainer = styled(Avatar.Root, {
+  borderRadius: 999,
+  display: "inline-block",
   width: 64,
   height: 64,
-  borderRadius: 999,
-  position: "relative",
   overflow: "hidden",
-  filter: "drop-shadow(2px 4px 2px rgba(0, 0, 0, 0.25))",
-
-  img: {
-    display: "inline",
-    height: "100%",
-    width: "auto",
-  },
 });
 
-export { AvatarContainer };
+export const AvatarImage = styled(Avatar.Image, {
+  width: "100%",
+  height: "100%",
+  objectFit: "cover",
+  borderRadius: "inherit",
+});
+
+export const AvatarFallback = styled(Avatar.Fallback, {
+  width: "100%",
+  height: "100%",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+
+  backgroundColor: "$gray-medium",
+  color: "$white",
+
+  svg: {
+    color: "$white",
+    width: 24,
+    height: 24,
+  },
+});
