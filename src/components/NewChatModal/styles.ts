@@ -53,6 +53,16 @@ const UsersListContainer = styled("div", {
   flexWrap: "wrap",
   gap: 16,
 });
+const FormFooter = styled("div", {
+  display: "flex",
+  justifyContent: "flex-end",
+  width: "100%",
+
+  button: {
+    padding: 16,
+    width: "fit-content",
+  },
+});
 
 export {
   Overlay,
@@ -62,4 +72,5 @@ export {
   ModalForm,
   Input,
   UsersListContainer,
+  FormFooter,
 };

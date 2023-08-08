@@ -1,6 +1,7 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import {
   CloseButton,
+  FormFooter,
   ModalContainer,
   ModalForm,
   ModalTitle,
@@ -23,6 +24,7 @@ import { LoadingSpinner } from "../LoadingSpinner";
 import { Input } from "../Input";
 import { UserBadge } from "./components/UserBadge";
 import { useAuth } from "../../hooks/useAuth";
+import { Button } from "../Button";
 
 type IUserData = {
   displayName: string;
@@ -101,7 +103,7 @@ function NewChatModal() {
             />
           )}
 
-          <h3>Pessoas</h3>
+          {selectedUsers.length > 1 ? <h3>Pessoas</h3> : ""}
           <UsersListContainer>
             {selectedUsers.map((user) => (
               <UserBadge
@@ -115,6 +117,11 @@ function NewChatModal() {
           {isCreatingAGroup && (
             <Input placeholder="Digite um nome para o grupo" />
           )}
+          <FormFooter>
+            <Button>
+              {isCreatingAGroup ? "Criar grupo" : "Criar conversa"}
+            </Button>
+          </FormFooter>
         </ModalForm>
       </ModalContainer>
     </Dialog.Portal>
