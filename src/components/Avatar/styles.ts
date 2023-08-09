@@ -6,6 +6,8 @@ export const AvatarContainer = styled(Avatar.Root, {
   display: "inline-block",
   width: 64,
   height: 64,
+  minWidth: 64,
+  minHeight: 64,
   overflow: "hidden",
 });
 

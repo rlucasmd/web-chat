@@ -9,7 +9,7 @@ function Avatar(props: AvatarProps) {
     <AvatarContainer>
       <AvatarImage {...props} />
 
-      <AvatarFallback delayMs={600}>
+      <AvatarFallback delayMs={300}>
         <User />
       </AvatarFallback>
     </AvatarContainer>
