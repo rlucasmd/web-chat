@@ -1,44 +1,46 @@
 import {
   QueryDocumentSnapshot,
+  Timestamp,
   collection,
-  doc,
   onSnapshot,
   orderBy,
   query,
-  where,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { database } from "../services/firebase";
 
-type IMessagesData = {
-  chatId: string;
-  content: string;
-  sender: string;
+type ISender = {
+  id: string;
+  displayName: string;
+  photoURL: string;
 };
 
-type IMessages = IMessagesData & {
+type IMessageData = {
+  content: string;
+  sentAt: Timestamp;
+  sentBy: ISender;
+};
+type IMessage = IMessageData & {
   id: string;
 };
 
 const converter = {
-  toFirestore: (data: IMessagesData) => data,
-  fromFirestore: (snap: QueryDocumentSnapshot) => snap.data() as IMessagesData,
+  toFirestore: (data: IMessageData) => data,
+  fromFirestore: (snap: QueryDocumentSnapshot) => snap.data() as IMessageData,
 };
 
-function useMessages(chatId: string) {
-  const [messages, setMessages] = useState<IMessages[]>([]);
+function useMessages(chatId?: string) {
+  const [messages, setMessages] = useState<IMessage[]>([]);
 
   useEffect(() => {
     // console.log("fetch messages");
-    const chatRef = doc(database, "chats", chatId);
+    // const chatRef = doc(database, "chats", chatId);
+    if (!chatId) return;
+    const messagesRef = collection(database, "message", chatId, "messages");
     // console.log(chatRef.path);
-    const q = query(
-      collection(database, "messages"),
-      where("chatId", "==", chatRef),
-      orderBy("sentAt"),
-    ).withConverter(converter);
+    const q = query(messagesRef, orderBy("sentAt")).withConverter(converter);
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const messagesData: IMessages[] = [];
+      const messagesData: IMessage[] = [];
       // console.log(querySnapshot.size);
       querySnapshot.forEach((doc) => {
         if (doc) messagesData.push({ ...doc.data(), id: doc.id });
