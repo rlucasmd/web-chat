@@ -32,14 +32,13 @@ const messages = [
   },
 ];
 
-function Chat() {
-  const { chatId } = useParams();
+interface IChatProps {
+  chatId?: string | undefined;
+}
+
+function Chat({ chatId }: IChatProps) {
   const { chats } = useChats();
   const chatData = chats.find((chat) => chat.id === chatId);
-  // const chatData = undefined;
-  console.log(chatData);
-  // useMessages("sDB5t0zLh7bbGSCBqxwJ");
-  // if (!chatData) return <LoadingSpinner color="purple" />;
   return (
     <ChatContainer>
       {chatData ? (

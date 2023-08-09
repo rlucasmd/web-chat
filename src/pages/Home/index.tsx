@@ -5,24 +5,30 @@ import {
   Main,
   AsideContent,
   ActionsButtons,
+  NoMessagesSelected,
 } from "./styles";
+
 import logoImage from "../../assets/logo.svg";
-import { Input } from "../../components/Input";
-import { Gear, MagnifyingGlass, PlusCircle, SignOut } from "phosphor-react";
+
+import { MagnifyingGlass, PlusCircle, SignOut } from "phosphor-react";
+
 import { ChatsList } from "./components/ChatsList";
 import { Chat } from "./components/Chat";
-// import { useParams } from "react-router-dom";
+
 import { Button } from "../../components/Button";
+import { Input } from "../../components/Input";
+import { useParams } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
-import { AutocompleteInput } from "../../components/AutocompleteInput";
-import * as Dialog from "@radix-ui/react-dialog";
+
 import { NewChatModal } from "../../components/NewChatModal";
-// import { useChats } from "../../hooks/useChats";
+
+import * as Dialog from "@radix-ui/react-dialog";
+
+import NoMessagesImage from "../../assets/no-messages.svg";
 
 function Home() {
-  // const { chatId } = useParams();
+  const { chatId } = useParams();
   const { logout } = useAuth();
-  // const { chats } = useChats("I6iKY52tzcgvVcFCYVhl2TBw2pL2");
   function handleLogout() {
     logout();
   }
@@ -56,8 +62,15 @@ function Home() {
         </AsideContent>
       </Aside>
       <Main>
-        <Chat />
-        {/* <AutocompleteInput /> */}
+        {chatId ? (
+          <Chat chatId={chatId} />
+        ) : (
+          <NoMessagesSelected>
+            <img src={NoMessagesImage} alt="" />
+            <strong>Sem mensagens por aqui...</strong>
+            <p>Clique em uma conversa</p>
+          </NoMessagesSelected>
+        )}
       </Main>
     </HomeContainer>
   );

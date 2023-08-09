@@ -63,6 +63,33 @@ const Main = styled("main", {
   flexDirection: "column",
   maxHeight: "100vh",
   width: "100%",
+  justifyContent: "center",
+  alignItems: "center",
+});
+
+const NoMessagesSelected = styled("div", {
+  display: "flex",
+  flexDirection: "column",
+  gap: 8,
+
+  justifyContent: "center",
+  alignItems: "center",
+
+  img: {
+    width: 150,
+    height: 150,
+  },
+
+  strong: {
+    fontSize: 24,
+    fontWeight: 700,
+    color: "$black",
+  },
+
+  span: {
+    fontSize: 16,
+    color: "$gray-dark",
+  },
 });
 export {
   HomeContainer,
@@ -71,4 +98,5 @@ export {
   ActionsButtons,
   AsideContent,
   Main,
+  NoMessagesSelected,
 };
