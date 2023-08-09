@@ -4,11 +4,10 @@ import { Content, MessageContainer, Time } from "./styles";
 
 interface MessageProps {
   sender: {
-    id: number;
-    avatarUrl: string;
-    name: string;
+    id: string;
+    photoURL: string;
+    displayName: string;
   };
-  chatId: number;
   children: string | ReactNode;
   send?: boolean;
 }
@@ -16,9 +15,9 @@ interface MessageProps {
 function Message({ sender, children, send }: MessageProps) {
   return (
     <MessageContainer send={send}>
-      <Avatar src={sender.avatarUrl} alt="" />
+      <Avatar src={sender.photoURL} alt="" />
       <Content>
-        {!send && <p className="title">{sender.name}</p>}
+        {!send && <p className="title">{sender.displayName}</p>}
         <p>{children}</p>
         <Time>10:00</Time>
       </Content>
