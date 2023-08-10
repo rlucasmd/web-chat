@@ -5,6 +5,8 @@ import { MessageInput } from "../MessageInput";
 import { ChatContainer, ChatHeader, ChatMessagesWrapper } from "./styles";
 import { useChats } from "../../../../hooks/useChats";
 import { LoadingSpinner } from "../../../../components/LoadingSpinner";
+import { useAuth } from "../../../../hooks/useAuth";
+import React, { useEffect, useRef } from "react";
 // const chatProps = {
 //   chatImage: "https://github.com/ranieri3232.png",
 // };
@@ -38,8 +40,28 @@ interface IChatProps {
 function Chat({ chatId }: IChatProps) {
   const [messages] = useMessages(chatId);
   const { chats } = useChats();
+  const { user } = useAuth();
+
+  const chatMessagesWrapperRef = useRef<HTMLDivElement>(null);
   const chatData = chats.find((chat) => chat.id === chatId);
-  console.log(messages);
+
+  useEffect(() => {
+    if (chatMessagesWrapperRef) {
+      chatMessagesWrapperRef.current?.addEventListener(
+        "DOMNodeInserted",
+        (event) => {
+          const { currentTarget: target } = event;
+          const { scrollHeight } = target as HTMLDivElement;
+          console.log(chatMessagesWrapperRef.current);
+          chatMessagesWrapperRef.current?.scroll({
+            top: scrollHeight,
+            behavior: "smooth",
+          });
+        },
+      );
+    }
+  }, [messages]);
+
   return (
     <ChatContainer>
       {chatData ? (
@@ -51,16 +73,13 @@ function Chat({ chatId }: IChatProps) {
               <span>Online</span>
             </div>
           </ChatHeader>
-          <ChatMessagesWrapper>
-            {/* <Message chatId={123} sender={messages[0].sentBy}>
-              {messages[0].content}
-            </Message>
-            <Message chatId={123} sender={messages[0].sentBy}>
-              {messages[0].content}
-            </Message>
-            {} */}
+          <ChatMessagesWrapper ref={chatMessagesWrapperRef}>
             {messages.map((message) => (
-              <Message sender={message.sentBy} key={message.id}>
+              <Message
+                sender={message.sentBy}
+                key={message.id}
+                send={user?.uid === message.sentBy.id}
+              >
                 {message.content}
               </Message>
             ))}

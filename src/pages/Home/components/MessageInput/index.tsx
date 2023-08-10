@@ -2,23 +2,39 @@ import { PaperPlaneTilt } from "phosphor-react";
 import { Input, MessageInputContainer, MessageInputWrapper } from "./styles";
 import { sendMessage } from "../../../../utils/firestore/message";
 
+import { useAuth } from "../../../../hooks/useAuth";
+import { useParams } from "react-router-dom";
+import { useState } from "react";
+
 function MessageInput() {
+  const [messageContent, setMessageContent] = useState("");
+  const { user } = useAuth();
+  const { chatId } = useParams();
   async function handleSendNewMessage() {
+    if (!chatId || !user) return;
+
+    if (messageContent.trim() === "") return;
+
     const data = {
-      chatId: "S3IFf42RrhGVDLWHttOJ",
-      content: "Menssagem de teste",
+      chatId,
+      content: messageContent,
       sentBy: {
-        id: "I6iKY52tzcgvVcFCYVhl2TBw2pL2",
-        photoURL: "https://www.github.com/ranieri3232.png",
-        displayName: "ranieri lucas",
+        id: user.uid,
+        photoURL: user.photoURL,
+        displayName: user.displayName,
       },
     };
     await sendMessage(data.content, data.sentBy, data.chatId);
+    setMessageContent("");
   }
   return (
     <MessageInputContainer>
       <MessageInputWrapper>
-        <Input placeholder="Digite aqui sua mensagem!" />
+        <Input
+          placeholder="Digite aqui sua mensagem!"
+          value={messageContent}
+          onChange={(e) => setMessageContent(e.target.value)}
+        />
         <button onClick={handleSendNewMessage}>
           <PaperPlaneTilt size={32} weight="fill" />
         </button>
