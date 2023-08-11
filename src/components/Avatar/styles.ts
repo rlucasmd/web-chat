@@ -9,6 +9,27 @@ export const AvatarContainer = styled(Avatar.Root, {
   minWidth: 64,
   minHeight: 64,
   overflow: "hidden",
+
+  variants: {
+    size: {
+      large: {
+        width: 64,
+        height: 64,
+        minWidth: 64,
+        minHeight: 64,
+      },
+      medium: {
+        width: 48,
+        height: 48,
+        minWidth: 48,
+        minHeight: 48,
+      },
+    },
+  },
+
+  defaultVariants: {
+    size: "large",
+  },
 });
 
 export const AvatarImage = styled(Avatar.Image, {
