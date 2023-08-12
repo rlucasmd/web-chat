@@ -59,7 +59,7 @@ function NewChatModal() {
   }
 
   async function fetchData() {
-    console.log("fetch data");
+    // console.log("fetch data");
     setLoading(true);
     const userRef = query(
       collection(database, "user"),

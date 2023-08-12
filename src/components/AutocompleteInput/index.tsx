@@ -75,7 +75,7 @@ function AutocompleteInput({ data, onSelectAUser }: IAutocomplete) {
             key={suggestion.id}
             onClick={() => handleSelectSuggestion(suggestion)}
           >
-            <Avatar src={suggestion.photoURL} />
+            <Avatar src={suggestion.photoURL} size="medium" />
             <div>
               <div>
                 <strong>{selectedValue}</strong>

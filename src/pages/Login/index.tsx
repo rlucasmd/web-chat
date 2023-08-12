@@ -33,9 +33,9 @@ function Login() {
     }
   }
   useEffect(() => {
-    console.log(user);
+    // console.log(user);
     if (user) navigate("/home");
-  }, [user]);
+  }, [user, navigate]);
 
   return (
     <LoginContainer>

@@ -7,31 +7,6 @@ import { useChats } from "../../../../hooks/useChats";
 import { LoadingSpinner } from "../../../../components/LoadingSpinner";
 import { useAuth } from "../../../../hooks/useAuth";
 import React, { useEffect, useRef } from "react";
-// const chatProps = {
-//   chatImage: "https://github.com/ranieri3232.png",
-// };
-
-// const messages = [
-//   {
-//     sender: {
-//       id: 1,
-//       name: "Ranieri Lucas",
-//       avatarUrl: "https://github.com/ranieri3232.png",
-//     },
-//     chatId: 123,
-//     content:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit voluptatibus, beatae debitis aut porro mollitia quam delectus quisquam cupiditate ipsum inventore dicta nemo maiores repudiandae id? Odit velit assumenda ex?",
-//   },
-//   {
-//     sender: {
-//       id: 2,
-//       name: "Manuelito Gomes",
-//       avatarUrl: "https://github.com/rlucasmd.png",
-//     },
-//     chatId: 123,
-//     content: "Lorem ip",
-//   },
-// ];
 
 interface IChatProps {
   chatId?: string | undefined;
@@ -45,20 +20,19 @@ function Chat({ chatId }: IChatProps) {
   const chatMessagesWrapperRef = useRef<HTMLDivElement>(null);
   const chatData = chats.find((chat) => chat.id === chatId);
 
+  function canScroll(currentElement: HTMLDivElement) {
+    const { scrollTop, scrollHeight, offsetHeight } = currentElement;
+
+    console.log(scrollTop, scrollHeight, offsetHeight);
+    currentElement.scroll({ top: scrollHeight, behavior: "smooth" });
+  }
+
   useEffect(() => {
     if (chatMessagesWrapperRef) {
-      chatMessagesWrapperRef.current?.addEventListener(
-        "DOMNodeInserted",
-        (event) => {
-          const { currentTarget: target } = event;
-          const { scrollHeight } = target as HTMLDivElement;
-          console.log(chatMessagesWrapperRef.current);
-          chatMessagesWrapperRef.current?.scroll({
-            top: scrollHeight,
-            behavior: "smooth",
-          });
-        },
-      );
+      const current = chatMessagesWrapperRef.current;
+      if (!current) return;
+
+      canScroll(current);
     }
   }, [messages]);
 

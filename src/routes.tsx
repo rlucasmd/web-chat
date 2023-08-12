@@ -12,7 +12,7 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
   const { user } = useAuth();
   const isSignedIn = Boolean(user);
 
-  console.log(user);
+  // console.log(user);
 
   if (!isSignedIn) {
     return <Navigate to="/login" />;
