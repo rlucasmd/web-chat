@@ -33,19 +33,22 @@ function useMessages(chatId?: string) {
   const [messages, setMessages] = useState<IMessage[]>([]);
 
   useEffect(() => {
-    // console.log("fetch messages");
-    // const chatRef = doc(database, "chats", chatId);
     if (!chatId) return;
+    setMessages([]);
     const messagesRef = collection(database, "message", chatId, "messages");
-    // console.log(chatRef.path);
     const q = query(messagesRef, orderBy("sentAt")).withConverter(converter);
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const unsubscribe = onSnapshot(q, (snapshot) => {
       const messagesData: IMessage[] = [];
-      // console.log(querySnapshot.size);
-      querySnapshot.forEach((doc) => {
-        if (doc) messagesData.push({ ...doc.data(), id: doc.id });
+      snapshot.docChanges().forEach((change) => {
+        if (change.type === "added") {
+          messagesData.push({ id: change.doc.id, ...change.doc.data() });
+        }
+        if (change.type === "removed") {
+          setMessages((state) => state.filter((el) => el.id !== change.doc.id));
+        }
       });
-      setMessages(messagesData);
+      if (messagesData.length > 0)
+        setMessages((state) => [...state, ...messagesData]);
     });
 
     return () => {
