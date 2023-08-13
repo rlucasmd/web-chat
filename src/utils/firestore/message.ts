@@ -3,9 +3,12 @@ import {
   Timestamp,
   addDoc,
   collection,
+  doc,
   serverTimestamp,
+  updateDoc,
 } from "firebase/firestore";
 import { database } from "../../services/firebase";
+import { promise } from "zod";
 
 type ISender = {
   id: string;
@@ -34,13 +37,22 @@ async function sendMessage(content: string, sentBy: ISender, chatId: string) {
     chatId,
     "messages",
   ).withConverter(converter);
-  //   if (!messageRef) return;
 
-  await addDoc(messageRef, {
+  const messagePromise = addDoc(messageRef, {
     sentBy,
     content,
     sentAt: serverTimestamp(),
   });
+  const docRef = doc(database, "chat", chatId);
+  const updateRecentMessagePromise = updateDoc(docRef, {
+    "recentMessage": {
+      content,
+      sentBy,
+      sentAt: serverTimestamp(),
+    }
+  });
+  await Promise.all([messagePromise, updateRecentMessagePromise]);
+
 }
 
 export { sendMessage };
