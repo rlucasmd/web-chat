@@ -17,7 +17,11 @@ type IChatData = {
   modifiedAt: Timestamp;
   recentMessage: {
     content: string;
-    sentBy: string;
+    sentBy: {
+      displayName: string;
+      id: string;
+      photoURL: string;
+    };
     sentAt: Timestamp;
   };
   type: number;
