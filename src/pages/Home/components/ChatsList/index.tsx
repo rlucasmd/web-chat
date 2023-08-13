@@ -9,10 +9,10 @@ function ChatsList() {
     <ChatsContainer>
       {chats.map((chat) => (
         <Chat key={chat.id} to={`/home/${chat.id}`}>
-          <Avatar alt="" />
+          <Avatar src={chat.photoURL} alt="" />
           <Content>
             <strong>{chat.name}</strong>
-            <span>{chat.recentMessage.content}</span>
+            <span>{chat.recentMessage.sentBy.displayName}: {chat.recentMessage.content}</span>
           </Content>
         </Chat>
       ))}
