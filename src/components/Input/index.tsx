@@ -1,17 +1,18 @@
-import { ComponentProps, ReactNode } from "react";
+import { ComponentProps, ElementRef, ReactNode, forwardRef } from "react";
 import { InputContainer, InputContent } from "./styles";
 
 type InputProps = ComponentProps<typeof InputContent> & {
   icon?: undefined | ReactNode;
+  error?: boolean;
 };
 
-function Input({ icon, ...props }: InputProps) {
+const Input = forwardRef<ElementRef<typeof InputContent>, InputProps>(({icon, error, ...props}, ref) => {
   return (
-    <InputContainer>
+    <InputContainer variant={error ? "error" : "default"}>
       {icon && icon}
-      <InputContent {...props} />
+      <InputContent ref={ref} {...props} />
     </InputContainer>
   );
-}
+});
 
 export { Input };

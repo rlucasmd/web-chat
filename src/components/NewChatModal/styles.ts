@@ -64,6 +64,13 @@ const FormFooter = styled("div", {
   },
 });
 
+const ErrorMessage = styled("span", {
+  fontFamily: "Roboto",
+  fontSize: 14,
+  color: "$danger",
+  fontWeight: 400,
+});
+
 export {
   Overlay,
   ModalContainer,
@@ -73,4 +80,5 @@ export {
   Input,
   UsersListContainer,
   FormFooter,
+  ErrorMessage
 };

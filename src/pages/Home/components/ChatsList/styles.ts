@@ -14,6 +14,7 @@ const Content = styled("div", {
   flexDirection: "column",
   gap: 8,
   width: "100%",
+  overflow: "hidden",
   ">strong": {
     fontFamily: "Roboto",
     fontWeight: 700,

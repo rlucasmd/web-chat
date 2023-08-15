@@ -20,6 +20,21 @@ const InputContainer = styled("div", {
       color: "$gray-dark",
     },
   },
+
+  variants: {
+    variant: {
+      default: {
+        borderColor: "$gray-light",
+      },
+      error: {
+        borderColor: "$danger",
+      }
+    }
+  },
+
+  defaultVariants: {
+    variant: "default",
+  },
   filter: "drop-shadow(2px 4px 2px rgba(0, 0, 0, 0.25))",
 });
 const InputContent = styled("input", {

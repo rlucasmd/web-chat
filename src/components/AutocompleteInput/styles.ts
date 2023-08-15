@@ -50,6 +50,18 @@ const FormControl = styled("div", {
         filter: "drop-shadow(2px 4px 2px rgba(0, 0, 0, 0.25))",
       },
     },
+    variant: {
+      default: {
+        borderColor: "$gray-light",
+      },
+      error: {
+        borderColor: "$danger",
+      }
+    }
+  },
+
+  defaultVariants: {
+    variant: "default",
   },
 });
 

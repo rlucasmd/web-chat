@@ -6,7 +6,7 @@ import {
   Item,
   Suggestions,
 } from "./styles";
-import { MagnifyingGlass, X } from "phosphor-react";
+import { MagnifyingGlass, Placeholder, X } from "phosphor-react";
 import { Button } from "../Button";
 import { Avatar } from "../Avatar";
 
@@ -20,9 +20,11 @@ type IUser = {
 type IAutocomplete = {
   data: IUser[];
   onSelectAUser: (user: IUser) => void;
+  placeholder?: string;
+  error?: boolean;
 };
 
-function AutocompleteInput({ data, onSelectAUser }: IAutocomplete) {
+function AutocompleteInput({ data, onSelectAUser, placeholder, error }: IAutocomplete) {
   const [selectedValue, setSelectedValue] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
 
@@ -57,11 +59,11 @@ function AutocompleteInput({ data, onSelectAUser }: IAutocomplete) {
 
   return (
     <Autosuggestions>
-      <FormControl show={showSuggestions}>
+      <FormControl show={showSuggestions} variant={error ? "error" : "default"}>
         <MagnifyingGlass size={16} />
         <Input
           type="text"
-          placeholder="Digite um nome"
+          placeholder={placeholder}
           value={selectedValue}
           onChange={(e) => handleChange(e)}
         />
