@@ -6,7 +6,7 @@ import {
   Item,
   Suggestions,
 } from "./styles";
-import { MagnifyingGlass, Placeholder, X } from "phosphor-react";
+import { MagnifyingGlass, X } from "phosphor-react";
 import { Button } from "../Button";
 import { Avatar } from "../Avatar";
 
@@ -22,9 +22,10 @@ type IAutocomplete = {
   onSelectAUser: (user: IUser) => void;
   placeholder?: string;
   error?: boolean;
+  selectedSuggestions?: string[];
 };
 
-function AutocompleteInput({ data, onSelectAUser, placeholder, error }: IAutocomplete) {
+function AutocompleteInput({ data, onSelectAUser, placeholder, error, selectedSuggestions }: IAutocomplete) {
   const [selectedValue, setSelectedValue] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
 
@@ -36,7 +37,8 @@ function AutocompleteInput({ data, onSelectAUser, placeholder, error }: IAutocom
   const filteredData = data.filter((suggestion) =>
     suggestion.displayName.startsWith(selectedValue),
   );
-  function handleSelectSuggestion(suggestion: IUser) {
+  function handleSelectSuggestion(suggestion: IUser, isDisabled: boolean) {
+    if(isDisabled) return;
     onSelectAUser(suggestion);
     setSelectedValue("");
     setShowSuggestions(false);
@@ -57,6 +59,10 @@ function AutocompleteInput({ data, onSelectAUser, placeholder, error }: IAutocom
     setSelectedValue("");
   }
 
+  function handleFocus(e: React.FocusEvent<HTMLInputElement>){
+    setShowSuggestions(true);
+  }
+
   return (
     <Autosuggestions>
       <FormControl show={showSuggestions} variant={error ? "error" : "default"}>
@@ -66,16 +72,20 @@ function AutocompleteInput({ data, onSelectAUser, placeholder, error }: IAutocom
           placeholder={placeholder}
           value={selectedValue}
           onChange={(e) => handleChange(e)}
+          onFocus={(e) => handleFocus(e)}
         />
         <Button type="button" onClick={clearSelection}>
           <X weight="bold" />
         </Button>
       </FormControl>
       <Suggestions show={showSuggestions}>
-        {filteredData.map((suggestion) => (
+        {filteredData.map((suggestion) => {
+          const disabled = selectedSuggestions?.includes(suggestion.id) 
+          return (
           <Item
             key={suggestion.id}
-            onClick={() => handleSelectSuggestion(suggestion)}
+            onClick={() => handleSelectSuggestion(suggestion, !!disabled)}
+            disabled={disabled}
           >
             <Avatar src={suggestion.photoURL} size="medium" />
             <div>
@@ -91,7 +101,8 @@ function AutocompleteInput({ data, onSelectAUser, placeholder, error }: IAutocom
               <p> {suggestion.email}</p>
             </div>
           </Item>
-        ))}
+          )
+        })}
       </Suggestions>
     </Autosuggestions>
   );

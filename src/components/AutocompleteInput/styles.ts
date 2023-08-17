@@ -126,6 +126,15 @@ const Item = styled("li", {
   "& + li": {
     borderTop: "1px solid $gray-medium",
   },
+
+  variants: {
+    disabled: {
+      true: {
+        filter: "opacity(0.7)",
+        cursor: "not-allowed",
+      }
+    }
+  }
 });
 
 export { Autosuggestions, FormControl, Input, Suggestions, Item };
