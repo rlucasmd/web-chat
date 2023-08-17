@@ -1,6 +1,7 @@
 import {
   QueryDocumentSnapshot,
   Timestamp,
+  addDoc,
   collection,
   onSnapshot,
   query,
@@ -66,7 +67,12 @@ function useChats() {
     };
   }, [user]);
 
-  return { chats };
+  async function createAChat(data: Partial<IChat>){
+    const chatRef = collection(database, "chat");
+    await addDoc(chatRef, data);
+  }
+
+  return { chats, createAChat };
 }
 
 export { useChats };

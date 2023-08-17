@@ -29,6 +29,7 @@ import { Button } from "../Button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useChats } from "../../hooks/useChats";
 
 type IUserData = {
   displayName: string;
@@ -70,10 +71,11 @@ const converter = {
 function NewChatModal() {
   const { user } = useAuth();
   const [userList, setUserList] = useState<IUser[]>([]);
+  const { createAChat } = useChats();
   // const [selectedUsers, setSelectedUsers] = useState<IUser[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const { handleSubmit, register, unregister, setValue, watch, formState: { errors } } = useForm<NewChatData>({
+  const { reset, handleSubmit, register, unregister, setValue, watch, formState: { errors } } = useForm<NewChatData>({
     resolver: zodResolver(newChatSchema),
     defaultValues: {
       name: "",
@@ -81,13 +83,21 @@ function NewChatModal() {
     }
   });
 
-  function handleCreateChatSubmit(data : NewChatData){
-    console.log(data);
-    // console.log(errors);
-  }
+  
+
+  
   // console.log(errors);
 
   const members = watch("members");
+  const membersReduced = members.reduce((acc: string[], user: IUser) => {
+    return [...acc, user.id];
+  }, []);
+
+  // useEffect(() => {
+  //   if(user) setValue("members", [...members, user]);
+  // }, [user]);
+
+  // console.log(membersReduced);
 
   function handleSelectAUser(user: IUser) {
     const findUser = members.find(
@@ -123,6 +133,26 @@ function NewChatModal() {
     setLoading(false);
   }
 
+  function handleCreateChatSubmit(data : NewChatData){
+    if(!user) return;
+    console.log(data);
+    // console.log(errors);
+    if(data.members.length === 1){
+      const newPrivateChat = {
+        members: [...membersReduced, user.uid],
+        name: data.members[0].displayName,
+        type: 1,
+        createdBy: user.uid,
+      }
+      try{
+        createAChat(newPrivateChat)
+      }catch(err){
+        console.error(err);
+      }
+    }
+    
+  }
+
   useEffect(() => {
     fetchData();
 
@@ -154,6 +184,7 @@ function NewChatModal() {
                 onSelectAUser={handleSelectAUser}
                 placeholder="Adicione pelo menos um usuário"
                 error={!!errors.members}
+                selectedSuggestions={membersReduced}
               />
               {errors.members && <ErrorMessage>{errors.members.message}</ErrorMessage>}
             </div>
