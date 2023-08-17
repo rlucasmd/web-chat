@@ -12,7 +12,7 @@ function ChatsList() {
           <Avatar src={chat.photoURL} alt="" />
           <Content>
             <strong>{chat.name}</strong>
-            <span>{chat.recentMessage.sentBy.displayName}: {chat.recentMessage.content}</span>
+            {chat.recentMessage && <span>{chat.recentMessage.sentBy.displayName}: {chat.recentMessage.content}</span>}
           </Content>
         </Chat>
       ))}
