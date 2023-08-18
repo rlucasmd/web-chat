@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { Avatar } from "../../../../components/Avatar";
 import { Content, MessageContainer, Time } from "./styles";
+import { Timestamp } from "firebase/firestore";
 
 interface MessageProps {
   sender: {
@@ -10,16 +11,21 @@ interface MessageProps {
   };
   children: string | ReactNode;
   send?: boolean;
+  sentAt: Timestamp;
 }
 
-function Message({ sender, children, send }: MessageProps) {
+function Message({ sender, children, send, sentAt }: MessageProps) {
+  function formatDate(date: Timestamp){
+    // const newDate = new Date(date);
+    return `${date.toDate().getHours()}:${date.toDate().getMinutes()}`;
+  }
   return (
     <MessageContainer send={send}>
       <Avatar src={sender.photoURL} alt="" />
       <Content>
         {!send && <p className="title">{sender.displayName}</p>}
         <p>{children}</p>
-        <Time>10:00</Time>
+        <Time>{formatDate(sentAt)}</Time>
       </Content>
     </MessageContainer>
   );

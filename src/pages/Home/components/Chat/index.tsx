@@ -79,6 +79,7 @@ function Chat({ chatId }: IChatProps) {
                 sender={message.sentBy}
                 key={message.id}
                 send={user?.uid === message.sentBy.id}
+                sentAt={message.sentAt}
               >
                 {message.content}
               </Message>
