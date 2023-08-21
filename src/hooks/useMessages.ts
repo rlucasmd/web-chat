@@ -2,6 +2,7 @@ import {
   QueryDocumentSnapshot,
   Timestamp,
   collection,
+  doc,
   onSnapshot,
   orderBy,
   query,
@@ -40,11 +41,21 @@ function useMessages(chatId?: string) {
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const messagesData: IMessage[] = [];
       snapshot.docChanges().forEach((change) => {
+        // console.log(change.doc.data(), change.type);
         if (change.type === "added") {
           messagesData.push({ id: change.doc.id, ...change.doc.data() });
         }
         if (change.type === "removed") {
           setMessages((state) => state.filter((el) => el.id !== change.doc.id));
+        }
+        if(change.type === "modified"){
+          // const updatedState = ;
+          // console.log(updatedState, messages);
+          setMessages(state => state.map(message => {
+            if(message.id === change.doc.id)
+              return ({id: change.doc.id, ...change.doc.data()})
+            return message;
+          }));
         }
       });
       if (messagesData.length > 0)
