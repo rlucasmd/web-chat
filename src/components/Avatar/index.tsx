@@ -11,7 +11,7 @@ function Avatar({ size, ...props }: AvatarProps) {
     <AvatarContainer size={size}>
       <AvatarImage {...props} />
 
-      <AvatarFallback delayMs={300}>
+      <AvatarFallback delayMs={100}>
         <User />
       </AvatarFallback>
     </AvatarContainer>
