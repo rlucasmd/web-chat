@@ -89,9 +89,9 @@ function NewChatModal() {
   // console.log(errors);
 
   const members = watch("members");
-  const membersReduced = members.reduce((acc: string[], user: IUser) => {
-    return [...acc, user.id];
-  }, []);
+  const membersReduced = members.reduce((acc: Map<string, boolean>, user: IUser) => {
+    return acc.set(user.id, true);
+  }, new Map<string, boolean>());
 
   // useEffect(() => {
   //   if(user) setValue("members", [...members, user]);
@@ -133,22 +133,25 @@ function NewChatModal() {
     setLoading(false);
   }
 
-  function handleCreateChatSubmit(data : NewChatData){
+  async function handleCreateChatSubmit(data : NewChatData){
     if(!user) return;
-    console.log(data);
-    // console.log(errors);
-    if(data.members.length === 1){
-      const newPrivateChat = {
-        members: [...membersReduced, user.uid],
-        name: data.members[0].displayName,
-        type: 1,
-        createdBy: user.uid,
-      }
-      try{
-        createAChat(newPrivateChat)
-      }catch(err){
-        console.error(err);
-      }
+    // console.log(data);
+    const isAGroup = data.members.length > 1;
+    // const memberss = members.reduce((acc: Map<string, boolean>, user: IUser) => {
+    //   return acc.set(user.id, true);
+    // }, new Map());
+    membersReduced.set(user.uid, true);
+    const newChat = {
+      members: membersReduced,
+      name: isAGroup ? data.name : data.members[0].displayName,
+      type: isAGroup ? 2 : 1,
+      createdBy: user.uid,
+    }
+    try{
+      const data = await createAChat(newChat);
+      console.log(data);
+    }catch(err){
+      console.error(err);
     }
     
   }
