@@ -22,7 +22,7 @@ type IAutocomplete = {
   onSelectAUser: (user: IUser) => void;
   placeholder?: string;
   error?: boolean;
-  selectedSuggestions?: string[];
+  selectedSuggestions?: Map<string, boolean>;
 };
 
 function AutocompleteInput({ data, onSelectAUser, placeholder, error, selectedSuggestions }: IAutocomplete) {
@@ -80,7 +80,7 @@ function AutocompleteInput({ data, onSelectAUser, placeholder, error, selectedSu
       </FormControl>
       <Suggestions show={showSuggestions}>
         {filteredData.map((suggestion) => {
-          const disabled = selectedSuggestions?.includes(suggestion.id) 
+          const disabled = selectedSuggestions?.has(suggestion.id) 
           return (
           <Item
             key={suggestion.id}
