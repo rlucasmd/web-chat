@@ -1,10 +1,16 @@
 import {
+  QueryConstraint,
   QueryDocumentSnapshot,
+  QueryFieldFilterConstraint,
   Timestamp,
   addDoc,
   collection,
+  doc,
+  getDoc,
+  getDocs,
   onSnapshot,
   query,
+  serverTimestamp,
   where,
 } from "firebase/firestore";
 import { database } from "../services/firebase";
@@ -14,7 +20,7 @@ import { useAuth } from "./useAuth";
 type IChatData = {
   createdAt: Timestamp;
   createdBy: string;
-  members: string[];
+  members: Map<string, boolean>;
   modifiedAt: Timestamp;
   recentMessage: {
     content: string;
@@ -25,8 +31,8 @@ type IChatData = {
     };
     sentAt: Timestamp;
   };
+  // memberss: ;
   type: number;
-  user: string[];
   name: string;
   photoURL: string;
 };
@@ -48,7 +54,7 @@ function useChats() {
     if (!user) return;
     const q = query(
       collection(database, "chat"),
-      where("members", "array-contains", user.uid),
+      where(`members.${user.uid}`, "==", true),
     ).withConverter(converter);
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -66,10 +72,43 @@ function useChats() {
       unsubscribe();
     };
   }, [user]);
+  const chatRef = collection(database, "chat");
+
+  async function findChatByUsers(users: Map<string, boolean>){
+    
+    // console.log(users);
+    const ref: QueryConstraint[] = [];
+    users.forEach((value, key) => {
+      ref.push(where(`members.${key}`, "==", true));
+    });
+    ref.push(where("type", "==", 1));
+    const q = query(chatRef, ...ref);
+    const docSnapshot = await getDocs(q);
+    console.log(docSnapshot.docs);
+    docSnapshot.forEach(doc => {
+      console.log(doc.id, doc.data());
+    });
+
+    return docSnapshot.docs.length > 0;
+  }
 
   async function createAChat(data: Partial<IChat>){
-    const chatRef = collection(database, "chat");
-    await addDoc(chatRef, data);
+    if(data.type === 1){
+      const response = await findChatByUsers(data.members!);
+      // console.log(response);
+      if(response)
+        throw new Error("Não foi possível criar a conversa!")
+    }
+    // console.log(data);
+      
+    const docRef = await addDoc(chatRef, {
+      ...data,
+      createdAt: serverTimestamp(),
+      modifiedAt: serverTimestamp(),
+      members: Object.fromEntries(data.members!),
+    });
+    const docSnap = await getDoc(docRef);
+    return ({ id: docSnap.id, ...docSnap.data });
   }
 
   return { chats, createAChat };
