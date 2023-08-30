@@ -29,7 +29,7 @@ const Content = styled("div", {
     width: "100%",
     overflow: "hidden",
     textOverflow: "ellipsis",
-    whiteSpace: "nowrap"
+    whiteSpace: "nowrap",
   },
 });
 

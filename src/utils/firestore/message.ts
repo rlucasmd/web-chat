@@ -8,7 +8,6 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { database } from "../../services/firebase";
-import { promise } from "zod";
 
 type ISender = {
   id: string;
@@ -21,9 +20,9 @@ type IMessageData = {
   sentAt: Timestamp;
   sentBy: ISender;
 };
-type IMessage = IMessageData & {
-  id: string;
-};
+// type IMessage = IMessageData & {
+//   id: string;
+// };
 
 const converter = {
   toFirestore: (data: IMessageData) => data,
@@ -45,14 +44,13 @@ async function sendMessage(content: string, sentBy: ISender, chatId: string) {
   });
   const docRef = doc(database, "chat", chatId);
   const updateRecentMessagePromise = updateDoc(docRef, {
-    "recentMessage": {
+    recentMessage: {
       content,
       sentBy,
       sentAt: serverTimestamp(),
-    }
+    },
   });
   await Promise.all([messagePromise, updateRecentMessagePromise]);
-
 }
 
 export { sendMessage };

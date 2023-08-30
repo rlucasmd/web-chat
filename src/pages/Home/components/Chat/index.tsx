@@ -6,7 +6,7 @@ import { ChatContainer, ChatHeader, ChatMessagesWrapper } from "./styles";
 import { useChats } from "../../../../hooks/useChats";
 import { LoadingSpinner } from "../../../../components/LoadingSpinner";
 import { useAuth } from "../../../../hooks/useAuth";
-import React, { useEffect, useRef, useCallback, useState } from "react";
+import { useEffect, useRef, useCallback, useState } from "react";
 
 interface IChatProps {
   chatId?: string | undefined;
@@ -19,16 +19,13 @@ function Chat({ chatId }: IChatProps) {
   const [canScroll, setCanScroll] = useState(true);
 
   const chatMessagesWrapperRef = useRef<HTMLDivElement>(null);
-  const chatData = chats.find((chat) => chat.id === chatId);
+  const chatData = chats.find((chat) => {
+    if (chat.id === chatId) return { ...chat, photoURL: "" };
 
-  function newMessageScrollToBottom(currentElement: HTMLDivElement) {
-    const { scrollTop, scrollHeight, offsetHeight } = currentElement;
+    return "";
+  });
+  console.log(chatData);
 
-    // console.log(scrollTop, scrollHeight, offsetHeight);
-    // console.log(currentElement);
-    if (canScroll)
-      currentElement.scroll({ top: scrollHeight, behavior: "smooth" });
-  }
   const handleScroll = useCallback(() => {
     const { current } = chatMessagesWrapperRef;
     if (!current) return;
@@ -41,17 +38,15 @@ function Chat({ chatId }: IChatProps) {
   }, [chatMessagesWrapperRef]);
 
   useEffect(() => {
-    if (chatMessagesWrapperRef.current) {
-      chatMessagesWrapperRef.current.addEventListener("scroll", handleScroll);
+    const wrapperMessagesRef = chatMessagesWrapperRef.current;
+    if (wrapperMessagesRef) {
+      wrapperMessagesRef.addEventListener("scroll", handleScroll);
 
       return () => {
-        chatMessagesWrapperRef.current?.removeEventListener(
-          "scroll",
-          handleScroll,
-        );
+        wrapperMessagesRef.removeEventListener("scroll", handleScroll);
       };
     }
-  }, [chatMessagesWrapperRef.current, handleScroll]);
+  }, [handleScroll, chatMessagesWrapperRef]);
 
   useEffect(() => {
     if (chatMessagesWrapperRef) {
@@ -60,7 +55,15 @@ function Chat({ chatId }: IChatProps) {
 
       newMessageScrollToBottom(current);
     }
-  }, [messages, newMessageScrollToBottom]);
+    function newMessageScrollToBottom(currentElement: HTMLDivElement) {
+      const { scrollHeight } = currentElement;
+
+      // console.log(scrollTop, scrollHeight, offsetHeight);
+      // console.log(currentElement);
+      if (canScroll)
+        currentElement.scroll({ top: scrollHeight, behavior: "smooth" });
+    }
+  }, [messages, canScroll]);
 
   return (
     <ChatContainer>

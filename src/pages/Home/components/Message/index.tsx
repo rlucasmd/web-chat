@@ -15,12 +15,13 @@ interface MessageProps {
 }
 
 function Message({ sender, children, send, sentAt }: MessageProps) {
-  function formatDate(date: Timestamp){
+  function formatDate(date: Timestamp) {
     // const newDate = new Date(date);
     // console.log(date);
-    if(date) return `${date.toDate().getHours()}:${date.toDate().getMinutes()}`;
+    if (date)
+      return `${date.toDate().getHours()}:${date.toDate().getMinutes()}`;
     // return `${date.toDate().getHours()}:${date.toDate().getMinutes()}`;
-    return "10:00"
+    return "10:00";
   }
   return (
     <MessageContainer send={send}>
