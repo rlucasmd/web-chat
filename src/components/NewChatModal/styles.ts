@@ -80,5 +80,5 @@ export {
   Input,
   UsersListContainer,
   FormFooter,
-  ErrorMessage
+  ErrorMessage,
 };

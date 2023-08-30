@@ -41,25 +41,32 @@ type IUser = IUserData & {
   id: string;
 };
 
-const newChatSchema = z.object({
-  name: z.string().max(60, "Nome do grupo muito comprido").optional(),
-  members: z.array(
-    z.object({
-      displayName: z.string(),
-      email: z.string(),
-      photoURL: z.string(),
-      id: z.string(),
-    })
-  ).min(1, "Deve se criar um conversa com pelo menos uma usuário")
-  .max(255, "Não é permitido criar grupso com mais de 255 pessoas"),
-}).refine(({ members, name}) => {
-  if(members.length > 1 && name?.trim() === "") return false;
+const newChatSchema = z
+  .object({
+    name: z.string().max(60, "Nome do grupo muito comprido").optional(),
+    members: z
+      .array(
+        z.object({
+          displayName: z.string(),
+          email: z.string(),
+          photoURL: z.string(),
+          id: z.string(),
+        }),
+      )
+      .min(1, "Deve se criar um conversa com pelo menos uma usuário")
+      .max(255, "Não é permitido criar grupso com mais de 255 pessoas"),
+  })
+  .refine(
+    ({ members, name }) => {
+      if (members.length > 1 && name?.trim() === "") return false;
 
-  return true;
-}, {
-  message: "Preencha o campo nome para o grupo",
-  path: ["name"]
-});
+      return true;
+    },
+    {
+      message: "Preencha o campo nome para o grupo",
+      path: ["name"],
+    },
+  );
 
 type NewChatData = z.infer<typeof newChatSchema>;
 
@@ -75,29 +82,34 @@ function NewChatModal() {
   // const [selectedUsers, setSelectedUsers] = useState<IUser[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const { reset, handleSubmit, register, unregister, setValue, watch, formState: { errors } } = useForm<NewChatData>({
+  const {
+    reset,
+    handleSubmit,
+    register,
+    unregister,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<NewChatData>({
     resolver: zodResolver(newChatSchema),
     defaultValues: {
       name: "",
-      members: []
-    }
+      members: [],
+    },
   });
 
-  
-
-  
   // console.log(errors);
 
   const members = watch("members");
-  const membersReduced = members.reduce((acc: Map<string, boolean>, user: IUser) => {
-    return acc.set(user.id, true);
-  }, new Map<string, boolean>());
-
-  // useEffect(() => {
-  //   if(user) setValue("members", [...members, user]);
-  // }, [user]);
-
-  // console.log(membersReduced);
+  const membersReduced = members.reduce(
+    (
+      acc: Map<string, IUserData>,
+      { id, displayName, email, photoURL }: IUser,
+    ) => {
+      return acc.set(id, { displayName, email, photoURL });
+    },
+    new Map<string, IUserData>(),
+  );
 
   function handleSelectAUser(user: IUser) {
     const findUser = members.find(
@@ -105,15 +117,15 @@ function NewChatModal() {
     );
     if (findUser) return;
     setValue("members", [...members, user]);
-    // setSelectedUsers((state) => [...state, user]);
   }
   function handleRemoveASelectedUser(id: string) {
-    setValue("members", members.filter((user) => user.id !== id));
-    // setSelectedUsers((state) => state.filter((user) => user.id !== id));
+    setValue(
+      "members",
+      members.filter((user) => user.id !== id),
+    );
   }
 
   async function fetchData() {
-    // console.log("fetch data");
     setLoading(true);
     const userRef = query(
       collection(database, "user"),
@@ -133,27 +145,32 @@ function NewChatModal() {
     setLoading(false);
   }
 
-  async function handleCreateChatSubmit(data : NewChatData){
-    if(!user) return;
-    // console.log(data);
+  async function handleCreateChatSubmit(data: NewChatData) {
+    if (!user) return;
+
     const isAGroup = data.members.length > 1;
-    // const memberss = members.reduce((acc: Map<string, boolean>, user: IUser) => {
-    //   return acc.set(user.id, true);
-    // }, new Map());
-    membersReduced.set(user.uid, true);
+
+    const { uid, displayName, photoURL, email } = user;
+
+    membersReduced.set(uid, { displayName, photoURL, email });
     const newChat = {
       members: membersReduced,
-      name: isAGroup ? data.name : data.members[0].displayName,
-      type: isAGroup ? 2 : 1,
-      createdBy: user.uid,
-    }
-    try{
+      name: isAGroup ? data.name! : data.members[0].displayName,
+      photoURL: isAGroup ? "" : data.members[0].photoURL,
+      isAGroup,
+      createdBy: {
+        displayName: user.displayName,
+        photoURL: user.photoURL,
+        id: user.uid,
+      },
+    };
+    try {
       const data = await createAChat(newChat);
       console.log(data);
-    }catch(err){
+      reset();
+    } catch (err) {
       console.error(err);
     }
-    
   }
 
   useEffect(() => {
@@ -163,7 +180,7 @@ function NewChatModal() {
 
     return () => {
       unregister("members", { keepDefaultValue: true });
-    }
+    };
   }, [register, unregister]);
   const isCreatingAGroup = members.length > 1;
   // console.log("render");
@@ -189,7 +206,9 @@ function NewChatModal() {
                 error={!!errors.members}
                 selectedSuggestions={membersReduced}
               />
-              {errors.members && <ErrorMessage>{errors.members.message}</ErrorMessage>}
+              {errors.members && (
+                <ErrorMessage>{errors.members.message}</ErrorMessage>
+              )}
             </div>
           )}
 
@@ -206,12 +225,18 @@ function NewChatModal() {
           </UsersListContainer>
           {isCreatingAGroup && (
             <div>
-              <Input error={!!errors.name} placeholder="Digite um nome para o grupo" {...register("name")}/>
-              { errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
+              <Input
+                error={!!errors.name}
+                placeholder="Digite um nome para o grupo"
+                {...register("name")}
+              />
+              {errors.name && (
+                <ErrorMessage>{errors.name.message}</ErrorMessage>
+              )}
             </div>
           )}
           <FormFooter>
-            <Button >
+            <Button>
               {isCreatingAGroup ? "Criar grupo" : "Criar conversa"}
             </Button>
           </FormFooter>

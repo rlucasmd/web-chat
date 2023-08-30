@@ -1,11 +1,9 @@
 import {
   QueryConstraint,
   QueryDocumentSnapshot,
-  QueryFieldFilterConstraint,
   Timestamp,
   addDoc,
   collection,
-  doc,
   getDoc,
   getDocs,
   onSnapshot,
@@ -17,10 +15,20 @@ import { database } from "../services/firebase";
 import { useEffect, useState } from "react";
 import { useAuth } from "./useAuth";
 
+type IUserData = {
+  email: string;
+  photoURL: string;
+  displayName: string;
+};
+
 type IChatData = {
   createdAt: Timestamp;
-  createdBy: string;
-  members: Map<string, boolean>;
+  createdBy: {
+    displayName: string;
+    id: string;
+    photoURL: string;
+  };
+  members: Map<string, IUserData>;
   modifiedAt: Timestamp;
   recentMessage: {
     content: string;
@@ -31,8 +39,7 @@ type IChatData = {
     };
     sentAt: Timestamp;
   };
-  // memberss: ;
-  type: number;
+  isAGroup: boolean;
   name: string;
   photoURL: string;
 };
@@ -54,7 +61,7 @@ function useChats() {
     if (!user) return;
     const q = query(
       collection(database, "chat"),
-      where(`members.${user.uid}`, "==", true),
+      where(`members.${user.uid}`, "!=", ""),
     ).withConverter(converter);
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -74,8 +81,7 @@ function useChats() {
   }, [user]);
   const chatRef = collection(database, "chat");
 
-  async function findChatByUsers(users: Map<string, boolean>){
-    
+  async function findChatByUsers(users: Map<string, IUserData>) {
     // console.log(users);
     const ref: QueryConstraint[] = [];
     users.forEach((value, key) => {
@@ -85,22 +91,21 @@ function useChats() {
     const q = query(chatRef, ...ref);
     const docSnapshot = await getDocs(q);
     console.log(docSnapshot.docs);
-    docSnapshot.forEach(doc => {
+    docSnapshot.forEach((doc) => {
       console.log(doc.id, doc.data());
     });
 
     return docSnapshot.docs.length > 0;
   }
 
-  async function createAChat(data: Partial<IChat>){
-    if(data.type === 1){
+  async function createAChat(data: Partial<IChat>) {
+    if (data.isAGroup) {
       const response = await findChatByUsers(data.members!);
       // console.log(response);
-      if(response)
-        throw new Error("Não foi possível criar a conversa!")
+      if (response) throw new Error("Não foi possível criar a conversa!");
     }
     // console.log(data);
-      
+
     const docRef = await addDoc(chatRef, {
       ...data,
       createdAt: serverTimestamp(),
@@ -108,7 +113,7 @@ function useChats() {
       members: Object.fromEntries(data.members!),
     });
     const docSnap = await getDoc(docRef);
-    return ({ id: docSnap.id, ...docSnap.data });
+    return { id: docSnap.id, ...docSnap.data };
   }
 
   return { chats, createAChat };

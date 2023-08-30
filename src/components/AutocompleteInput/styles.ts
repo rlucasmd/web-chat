@@ -56,8 +56,8 @@ const FormControl = styled("div", {
       },
       error: {
         borderColor: "$danger",
-      }
-    }
+      },
+    },
   },
 
   defaultVariants: {
@@ -132,9 +132,9 @@ const Item = styled("li", {
       true: {
         filter: "opacity(0.7)",
         cursor: "not-allowed",
-      }
-    }
-  }
+      },
+    },
+  },
 });
 
 export { Autosuggestions, FormControl, Input, Suggestions, Item };

@@ -10,11 +10,14 @@ import { MagnifyingGlass, X } from "phosphor-react";
 import { Button } from "../Button";
 import { Avatar } from "../Avatar";
 
-type IUser = {
-  id: string;
+type IUserData = {
   displayName: string;
   photoURL: string;
   email: string;
+};
+
+type IUser = IUserData & {
+  id: string;
 };
 
 type IAutocomplete = {
@@ -22,10 +25,16 @@ type IAutocomplete = {
   onSelectAUser: (user: IUser) => void;
   placeholder?: string;
   error?: boolean;
-  selectedSuggestions?: Map<string, boolean>;
+  selectedSuggestions?: Map<string, IUserData>;
 };
 
-function AutocompleteInput({ data, onSelectAUser, placeholder, error, selectedSuggestions }: IAutocomplete) {
+function AutocompleteInput({
+  data,
+  onSelectAUser,
+  placeholder,
+  error,
+  selectedSuggestions,
+}: IAutocomplete) {
   const [selectedValue, setSelectedValue] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
 
@@ -38,7 +47,7 @@ function AutocompleteInput({ data, onSelectAUser, placeholder, error, selectedSu
     suggestion.displayName.startsWith(selectedValue),
   );
   function handleSelectSuggestion(suggestion: IUser, isDisabled: boolean) {
-    if(isDisabled) return;
+    if (isDisabled) return;
     onSelectAUser(suggestion);
     setSelectedValue("");
     setShowSuggestions(false);
@@ -59,7 +68,7 @@ function AutocompleteInput({ data, onSelectAUser, placeholder, error, selectedSu
     setSelectedValue("");
   }
 
-  function handleFocus(e: React.FocusEvent<HTMLInputElement>){
+  function handleFocus() {
     setShowSuggestions(true);
   }
 
@@ -72,7 +81,7 @@ function AutocompleteInput({ data, onSelectAUser, placeholder, error, selectedSu
           placeholder={placeholder}
           value={selectedValue}
           onChange={(e) => handleChange(e)}
-          onFocus={(e) => handleFocus(e)}
+          onFocus={handleFocus}
         />
         <Button type="button" onClick={clearSelection}>
           <X weight="bold" />
@@ -80,28 +89,28 @@ function AutocompleteInput({ data, onSelectAUser, placeholder, error, selectedSu
       </FormControl>
       <Suggestions show={showSuggestions}>
         {filteredData.map((suggestion) => {
-          const disabled = selectedSuggestions?.has(suggestion.id) 
+          const disabled = selectedSuggestions?.has(suggestion.id);
           return (
-          <Item
-            key={suggestion.id}
-            onClick={() => handleSelectSuggestion(suggestion, !!disabled)}
-            disabled={disabled}
-          >
-            <Avatar src={suggestion.photoURL} size="medium" />
-            <div>
+            <Item
+              key={suggestion.id}
+              onClick={() => handleSelectSuggestion(suggestion, !!disabled)}
+              disabled={disabled}
+            >
+              <Avatar src={suggestion.photoURL} size="medium" />
               <div>
-                <strong>{selectedValue}</strong>
-                <span>
-                  {separateHighlightedPart(
-                    suggestion.displayName,
-                    selectedValue,
-                  )}
-                </span>
+                <div>
+                  <strong>{selectedValue}</strong>
+                  <span>
+                    {separateHighlightedPart(
+                      suggestion.displayName,
+                      selectedValue,
+                    )}
+                  </span>
+                </div>
+                <p> {suggestion.email}</p>
               </div>
-              <p> {suggestion.email}</p>
-            </div>
-          </Item>
-          )
+            </Item>
+          );
         })}
       </Suggestions>
     </Autosuggestions>
