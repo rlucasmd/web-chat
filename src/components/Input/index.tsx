@@ -6,13 +6,15 @@ type InputProps = ComponentProps<typeof InputContent> & {
   error?: boolean;
 };
 
-const Input = forwardRef<ElementRef<typeof InputContent>, InputProps>(({icon, error, ...props}, ref) => {
-  return (
-    <InputContainer variant={error ? "error" : "default"}>
-      {icon && icon}
-      <InputContent ref={ref} {...props} />
-    </InputContainer>
-  );
-});
+const Input = forwardRef<ElementRef<typeof InputContent>, InputProps>(
+  ({ icon, error, ...props }, ref) => {
+    return (
+      <InputContainer variant={error ? "error" : "default"}>
+        {icon && icon}
+        <InputContent ref={ref} {...props} />
+      </InputContainer>
+    );
+  },
+);
 
 export { Input };

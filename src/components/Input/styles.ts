@@ -28,8 +28,8 @@ const InputContainer = styled("div", {
       },
       error: {
         borderColor: "$danger",
-      }
-    }
+      },
+    },
   },
 
   defaultVariants: {
