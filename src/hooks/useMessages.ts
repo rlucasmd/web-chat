@@ -2,7 +2,6 @@ import {
   QueryDocumentSnapshot,
   Timestamp,
   collection,
-  doc,
   onSnapshot,
   orderBy,
   query,
@@ -48,14 +47,16 @@ function useMessages(chatId?: string) {
         if (change.type === "removed") {
           setMessages((state) => state.filter((el) => el.id !== change.doc.id));
         }
-        if(change.type === "modified"){
+        if (change.type === "modified") {
           // const updatedState = ;
           // console.log(updatedState, messages);
-          setMessages(state => state.map(message => {
-            if(message.id === change.doc.id)
-              return ({id: change.doc.id, ...change.doc.data()})
-            return message;
-          }));
+          setMessages((state) =>
+            state.map((message) => {
+              if (message.id === change.doc.id)
+                return { id: change.doc.id, ...change.doc.data() };
+              return message;
+            }),
+          );
         }
       });
       if (messagesData.length > 0)
