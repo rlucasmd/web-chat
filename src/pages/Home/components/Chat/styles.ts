@@ -2,25 +2,13 @@ import { styled } from "../../../../styles";
 
 const ChatContainer = styled("div", {
   display: "flex",
-  maxHeight: "100%",
+  height: "100vh",
   width: "100%",
   flex: 1,
   flexDirection: "column",
   background: "$background",
   alignItems: "center",
   justifyContent: "center",
-});
-
-const ChatMessagesWrapper = styled("div", {
-  display: "flex",
-  flexDirection: "column",
-  padding: 32,
-  gap: 16,
-  flex: 1,
-  overflow: "auto",
-  maxHeight: "100%",
-  width: "100%",
-  background: "$details",
 });
 const ChatHeader = styled("header", {
   display: "flex",
@@ -50,4 +38,4 @@ const ChatHeader = styled("header", {
   },
 });
 
-export { ChatContainer, ChatMessagesWrapper, ChatHeader };
+export { ChatContainer, ChatHeader };
