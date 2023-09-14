@@ -10,7 +10,7 @@ type IUserData = {
   groups: string[];
 };
 
-type IUser = IUserData & {
+export type IUser = IUserData & {
   uid: string;
 };
 

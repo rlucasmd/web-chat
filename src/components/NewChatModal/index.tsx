@@ -181,7 +181,7 @@ function NewChatModal() {
     return () => {
       unregister("members", { keepDefaultValue: true });
     };
-  }, [register, unregister]);
+  }, []);
   const isCreatingAGroup = members.length > 1;
   // console.log("render");
   return (
