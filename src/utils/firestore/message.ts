@@ -1,10 +1,10 @@
 import {
   QueryDocumentSnapshot,
-  Timestamp,
+  // Timestamp,
   addDoc,
   collection,
   doc,
-  serverTimestamp,
+  // serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
 import { database } from "../../services/firebase";
@@ -17,7 +17,7 @@ type ISender = {
 
 type IMessageData = {
   content: string;
-  sentAt: Timestamp;
+  sentAt: Date;
   sentBy: ISender;
 };
 // type IMessage = IMessageData & {
@@ -40,14 +40,14 @@ async function sendMessage(content: string, sentBy: ISender, chatId: string) {
   const messagePromise = addDoc(messageRef, {
     sentBy,
     content,
-    sentAt: serverTimestamp(),
+    sentAt: new Date(),
   });
   const docRef = doc(database, "chat", chatId);
   const updateRecentMessagePromise = updateDoc(docRef, {
     recentMessage: {
       content,
       sentBy,
-      sentAt: serverTimestamp(),
+      sentAt: new Date(),
     },
   });
   await Promise.all([messagePromise, updateRecentMessagePromise]);
